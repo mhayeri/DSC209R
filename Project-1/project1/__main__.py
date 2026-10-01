@@ -4,7 +4,7 @@ from __future__ import annotations
 import altair as alt
 
 from project1.config import OUTPUT_DIR, SCALE_FACTOR
-from project1.data import category_price_summary, load_grocerydb
+from project1.data import category_price_summary, load_grocerydb, log_linear_trend
 from project1.price_plot import build_price_plot
 
 
@@ -18,7 +18,10 @@ def save(chart: alt.TopLevelMixin, name: str) -> None:
 def main() -> None:
     """Load the data and render every chart."""
     df = load_grocerydb()
-    save(build_price_plot(category_price_summary(df)), "plot1_price_vs_processing.png")
+    summary = category_price_summary(df)
+    trend, price_ratio = log_linear_trend(summary)
+    print(f"each +0.1 processing score multiplies price per calorie by {price_ratio:.2f}")
+    save(build_price_plot(summary, trend), "plot1_price_vs_processing.png")
 
 
 if __name__ == "__main__":
