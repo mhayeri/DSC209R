@@ -8,6 +8,10 @@ import pandas as pd
 
 from project1.config import DATA_PATH, EXCLUDED_CATEGORIES, MIN_CATEGORY_ITEMS
 
+# Display order and names for the store panels, top to bottom.
+STORE_ORDER: tuple[str, ...] = ("WholeFoods", "Walmart", "Target")
+STORE_LABELS: dict[str, str] = {"WholeFoods": "Whole Foods", "Walmart": "Walmart", "Target": "Target"}
+
 # price percal is dollars per kcal; the chart reports cents per 100 kcal.
 DOLLARS_PER_KCAL_TO_CENTS_PER_100KCAL: int = 100 * 100
 
@@ -72,3 +76,32 @@ def log_linear_trend(summary: pd.DataFrame, n_points: int = 50) -> tuple[pd.Data
     xs = np.linspace(summary["fpro"].min(), summary["fpro"].max(), n_points)
     line = pd.DataFrame({"fpro": xs, "cents": 10 ** (intercept + slope * xs)})
     return line, float(10 ** (slope * 0.1))
+
+
+def store_histogram(df: pd.DataFrame, n_bins: int = 20) -> pd.DataFrame:
+    """Bin the processing score within each store.
+
+    Counts are converted to a share of that store's items so stores with very
+    different catalog sizes can be compared on one scale.
+
+    Args:
+        df: Raw GroceryDB table.
+        n_bins: Number of equal-width bins between 0 and 1.
+
+    Returns:
+        Columns ``store_label``, ``lo``, ``hi`` (bin edges) and ``share`` (percent).
+    """
+    edges = np.linspace(0, 1, n_bins + 1)
+    rows: list[dict[str, float | str]] = []
+    for store in STORE_ORDER:
+        counts, _ = np.histogram(df.loc[df["store"] == store, "FPro"], bins=edges)
+        for lo, hi, count in zip(edges[:-1], edges[1:], counts):
+            rows.append(
+                {
+                    "store_label": STORE_LABELS[store],
+                    "lo": lo,
+                    "hi": hi,
+                    "share": count / counts.sum() * 100,
+                }
+            )
+    return pd.DataFrame(rows)
