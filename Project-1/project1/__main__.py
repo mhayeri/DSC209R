@@ -3,7 +3,8 @@ from __future__ import annotations
 
 import altair as alt
 
-from project1.config import OUTPUT_DIR, SCALE_FACTOR
+from project1.checkpoint import build_checkpoint_pdf
+from project1.config import OUTPUT_DIR, PROJECT_ROOT, SCALE_FACTOR
 from project1.data import (
     category_price_summary,
     load_grocerydb,
@@ -34,6 +35,19 @@ def main() -> None:
     save(build_store_plot(store_histogram(df), store_medians(df), len(df)), "plot2_processing_by_store.png")
     sugar, n_removed = sugar_by_class(df)
     save(build_sugar_plot(sugar, n_removed), "plot3_sugar_by_class.png")
+
+    paragraph = PROJECT_ROOT / "writeup" / "checkpoint_paragraph.md"
+    if paragraph.exists():
+        build_checkpoint_pdf(
+            [
+                ("Plot A", OUTPUT_DIR / "plot1_price_vs_processing.png"),
+                ("Plot B", OUTPUT_DIR / "plot2_processing_by_store.png"),
+                ("Plot C", OUTPUT_DIR / "plot3_sugar_by_class.png"),
+            ],
+            paragraph,
+            OUTPUT_DIR / "checkpoint_submission.pdf",
+        )
+        print("saved checkpoint_submission.pdf")
 
 
 if __name__ == "__main__":

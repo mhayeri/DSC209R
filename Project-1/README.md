@@ -11,7 +11,7 @@ Project-1/
   data/grocerydb.csv     raw dataset
   project1/              plotting code
   outputs/               rendered charts
-  writeup/               design write-up
+  writeup/               checkpoint paragraph
 ```
 
 ## Setup
@@ -28,7 +28,7 @@ From this folder:
 python -m project1
 ```
 
-This renders the three charts into `outputs/`:
+This renders the three charts and the checkpoint PDF into `outputs/`:
 
 | File | Takeaway |
 |---|---|
