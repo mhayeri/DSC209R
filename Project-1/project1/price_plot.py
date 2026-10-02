@@ -18,7 +18,6 @@ CLUSTER: tuple[str, ...] = (
 # Categories named on the chart: the extremes plus a few recognizable foods.
 HIGHLIGHT: tuple[str, ...] = (
     "meat-poultry-wf",
-    "seafood-wf",
     "produce-beans-wf",
     "pasta-noodles",
     "baby-food",
@@ -59,7 +58,7 @@ def build_price_plot(summary: pd.DataFrame, trend: pd.DataFrame) -> alt.TopLevel
                 legend=alt.Legend(values=[100, 500, 1000, 2000]),
             ),
             color=alt.condition("datum.highlight", alt.value(ACCENT), alt.value(GREY)),
-            tooltip=["label", "n"],
+            tooltip=["category", "n"],
         )
     )
     labels = (
@@ -79,6 +78,7 @@ def build_price_plot(summary: pd.DataFrame, trend: pd.DataFrame) -> alt.TopLevel
             f"Each dot is one of {len(summary)} food categories "
             "(categories with 20+ items priced per calorie; coffee beans excluded).",
             "Value = category median across Walmart, Target and Whole Foods items. Dashed line: log-linear fit.",
+            "Red dots are the categories named or boxed on the chart; grey dots are the rest.",
         ],
     )
     return apply_theme((callout[0] + trend_line + points + labels + callout[1]).properties(width=700, height=420, title=title))
