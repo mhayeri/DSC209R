@@ -3,9 +3,9 @@ from __future__ import annotations
 
 import altair as alt
 
-GREY: str = "#9aa0a6"      # context marks
-ACCENT: str = "#d1495b"    # the marks the reader should look at
-DARK: str = "#2b2d42"      # titles, reference lines, labels
+CONTEXT: str = "#4ea8de"   # background marks, a clear mid blue
+ACCENT: str = "#f26b21"    # the marks the reader should look at, a vivid orange
+DARK: str = "#1b2a41"      # titles, reference lines, labels (deep navy)
 SUBTITLE: str = "#555555"
 
 

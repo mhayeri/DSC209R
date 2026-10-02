@@ -5,7 +5,7 @@ import altair as alt
 import pandas as pd
 
 from project1.data import STORE_LABELS, STORE_ORDER
-from project1.theme import ACCENT, DARK, GREY, apply_theme
+from project1.theme import ACCENT, CONTEXT, DARK, apply_theme
 
 # Scores at or above this are drawn in the accent color as "heavily processed".
 HEAVY_THRESHOLD: float = 0.8
@@ -47,7 +47,7 @@ def build_store_plot(
                     scale=alt.Scale(domain=[0, MAX_SHARE_PCT]),
                 ),
                 color=alt.condition(
-                    f"datum.lo >= {HEAVY_THRESHOLD}", alt.value(ACCENT), alt.value(GREY)
+                    f"datum.lo >= {HEAVY_THRESHOLD}", alt.value(ACCENT), alt.value(CONTEXT)
                 ),
             )
         )
@@ -73,7 +73,7 @@ def build_store_plot(
         "Whole Foods stocks far more minimally processed food than Walmart or Target",
         subtitle=(
             f"Histogram of Food Processing Score per store (20 bins, all {n_items:,} items); "
-            f"red = score {HEAVY_THRESHOLD} or higher (heavily processed)."
+            f"orange = score {HEAVY_THRESHOLD} or higher (heavily processed)."
         ),
     )
     return apply_theme(alt.vconcat(*panels).properties(title=title))

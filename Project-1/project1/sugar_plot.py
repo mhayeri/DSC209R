@@ -6,7 +6,7 @@ from decimal import ROUND_HALF_UP, Decimal
 import altair as alt
 import pandas as pd
 
-from project1.theme import ACCENT, GREY, apply_theme
+from project1.theme import ACCENT, CONTEXT, DARK, apply_theme
 
 BAR_SIZE: int = 60
 
@@ -34,17 +34,22 @@ def build_sugar_plot(summary: pd.DataFrame, n_removed: int) -> alt.TopLevelMixin
     )
     iqr = (
         alt.Chart(summary)
-        .mark_bar(size=BAR_SIZE, color=GREY, opacity=0.6)
-        .encode(x=x, y=alt.Y("q1:Q", title="Sugar (g per 100 g of product)"), y2="q3:Q")
+        .mark_bar(size=BAR_SIZE, opacity=0.7)
+        .encode(
+            x=x,
+            y=alt.Y("q1:Q", title="Sugar (g per 100 g of product)"),
+            y2="q3:Q",
+            color=alt.condition("datum.FPro_class == 3", alt.value(ACCENT), alt.value(CONTEXT)),
+        )
     )
     median = (
         alt.Chart(summary)
-        .mark_tick(color=ACCENT, thickness=4, size=BAR_SIZE)
+        .mark_tick(color=DARK, thickness=4, size=BAR_SIZE)
         .encode(x=x, y="med:Q")
     )
     median_labels = (
         alt.Chart(summary)
-        .mark_text(dx=48, align="left", color=ACCENT, fontSize=12)
+        .mark_text(dx=48, align="left", color=DARK, fontSize=13, fontWeight="bold")
         .encode(x=x, y="med:Q", text=alt.Text("med:Q", format=".1f"))
     )
     top_median = summary["med"].max()
@@ -52,7 +57,7 @@ def build_sugar_plot(summary: pd.DataFrame, n_removed: int) -> alt.TopLevelMixin
     title = alt.TitleParams(
         "Sugar jumps only in the ultra-processed class",
         subtitle=[
-            "Grey bar = middle 50% of items (25th-75th percentile); red tick = median, labeled "
+            "Bar = middle 50% of items (25th-75th percentile); dark tick = median, labeled "
             f"({_one_decimal(top_median)} g in class 3 vs {_one_decimal(other_median)} g or less elsewhere).",
             f"Items with sugar > 100 g/100 g (data errors, {n_removed} rows) removed.",
         ],

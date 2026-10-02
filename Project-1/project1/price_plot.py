@@ -4,7 +4,7 @@ from __future__ import annotations
 import altair as alt
 import pandas as pd
 
-from project1.theme import ACCENT, DARK, GREY, apply_theme
+from project1.theme import ACCENT, CONTEXT, DARK, apply_theme
 
 # Cheap, heavily processed staples called out together in a shaded box.
 CLUSTER: tuple[str, ...] = (
@@ -57,7 +57,7 @@ def build_price_plot(summary: pd.DataFrame, trend: pd.DataFrame) -> alt.TopLevel
                 scale=alt.Scale(domain=[20, 2000], range=[40, 700]),
                 legend=alt.Legend(values=[100, 500, 1000, 2000]),
             ),
-            color=alt.condition("datum.highlight", alt.value(ACCENT), alt.value(GREY)),
+            color=alt.condition("datum.highlight", alt.value(ACCENT), alt.value(CONTEXT)),
             tooltip=["category", "n"],
         )
     )
@@ -78,7 +78,7 @@ def build_price_plot(summary: pd.DataFrame, trend: pd.DataFrame) -> alt.TopLevel
             f"Each dot is one of {len(summary)} food categories "
             "(categories with 20+ items priced per calorie; coffee beans excluded).",
             "Value = category median across Walmart, Target and Whole Foods items. Dashed line: log-linear fit.",
-            "Red dots are the categories named or boxed on the chart; grey dots are the rest.",
+            "Orange dots are the categories named or boxed on the chart; blue dots are the rest.",
         ],
     )
     return apply_theme((callout[0] + trend_line + points + labels + callout[1]).properties(width=700, height=420, title=title))
@@ -92,7 +92,7 @@ def _cluster_callout() -> tuple[alt.Chart, alt.Chart]:
     """
     box = (
         alt.Chart(pd.DataFrame({"x0": [0.84], "x1": [1.0], "y0": [20], "y1": [48]}))
-        .mark_rect(color=ACCENT, opacity=0.10)
+        .mark_rect(color=ACCENT, opacity=0.14)
         .encode(x="x0:Q", x2="x1:Q", y="y0:Q", y2="y1:Q")
     )
     caption = (
