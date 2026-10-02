@@ -32,8 +32,8 @@ def main() -> None:
     print(f"each +0.1 processing score multiplies price per calorie by {price_ratio:.2f}")
     save(build_price_plot(summary, trend), "plot1_price_vs_processing.png")
     save(build_store_plot(store_histogram(df), store_medians(df), len(df)), "plot2_processing_by_store.png")
-    sugar, _ = sugar_by_class(df)
-    save(build_sugar_plot(sugar), "plot3_sugar_by_class.png")
+    sugar, n_removed = sugar_by_class(df)
+    save(build_sugar_plot(sugar, n_removed), "plot3_sugar_by_class.png")
 
 
 if __name__ == "__main__":

@@ -9,11 +9,12 @@ from project1.theme import ACCENT, GREY, apply_theme
 BAR_SIZE: int = 60
 
 
-def build_sugar_plot(summary: pd.DataFrame) -> alt.TopLevelMixin:
+def build_sugar_plot(summary: pd.DataFrame, n_removed: int) -> alt.TopLevelMixin:
     """Draw each class as an interquartile bar with a median tick.
 
     Args:
         summary: Output of :func:`project1.data.sugar_by_class`.
+        n_removed: Rows dropped for impossible sugar values, stated in the subtitle.
 
     Returns:
         A themed Altair chart ready to be saved.
@@ -34,8 +35,19 @@ def build_sugar_plot(summary: pd.DataFrame) -> alt.TopLevelMixin:
         .mark_tick(color=ACCENT, thickness=4, size=BAR_SIZE)
         .encode(x=x, y="med:Q")
     )
-    title = alt.TitleParams(
-        "Ultra-processed foods carry several times more sugar than minimally processed ones",
-        subtitle="Grey bar = middle 50% of items; red tick = median.",
+    median_labels = (
+        alt.Chart(summary)
+        .mark_text(dx=48, align="left", color=ACCENT, fontSize=12)
+        .encode(x=x, y="med:Q", text=alt.Text("med:Q", format=".1f"))
     )
-    return apply_theme((iqr + median).properties(width=560, height=380, title=title))
+    top_median = summary["med"].max()
+    other_median = summary["med"].drop(summary["med"].idxmax()).max()
+    title = alt.TitleParams(
+        "Sugar jumps only in the ultra-processed class",
+        subtitle=(
+            "Grey bar = middle 50% of items (25th-75th percentile); red tick = median "
+            f"(labeled; {top_median:.1f} g in class 3 vs {other_median:.1f} g or less elsewhere). "
+            f"Items with sugar > 100 g/100 g (data errors, {n_removed} rows) removed."
+        ),
+    )
+    return apply_theme((iqr + median + median_labels).properties(width=560, height=380, title=title))
