@@ -9,6 +9,7 @@ from project1.data import (
     load_grocerydb,
     log_linear_trend,
     store_histogram,
+    store_medians,
 )
 from project1.price_plot import build_price_plot
 from project1.store_plot import build_store_plot
@@ -28,7 +29,7 @@ def main() -> None:
     trend, price_ratio = log_linear_trend(summary)
     print(f"each +0.1 processing score multiplies price per calorie by {price_ratio:.2f}")
     save(build_price_plot(summary, trend), "plot1_price_vs_processing.png")
-    save(build_store_plot(store_histogram(df), len(df)), "plot2_processing_by_store.png")
+    save(build_store_plot(store_histogram(df), store_medians(df), len(df)), "plot2_processing_by_store.png")
 
 
 if __name__ == "__main__":

@@ -105,3 +105,23 @@ def store_histogram(df: pd.DataFrame, n_bins: int = 20) -> pd.DataFrame:
                 }
             )
     return pd.DataFrame(rows)
+
+
+def store_medians(df: pd.DataFrame) -> pd.DataFrame:
+    """Median processing score for each store.
+
+    Args:
+        df: Raw GroceryDB table.
+
+    Returns:
+        Columns ``store_label``, ``med`` and ``text`` (a ready-made annotation).
+    """
+    meds = df.groupby("store")["FPro"].median().round(2)
+    out = pd.DataFrame(
+        {
+            "store_label": [STORE_LABELS[s] for s in STORE_ORDER],
+            "med": [meds[s] for s in STORE_ORDER],
+        }
+    )
+    out["text"] = "median " + out["med"].astype(str)
+    return out
