@@ -10,6 +10,9 @@ from project1.theme import ACCENT, DARK, GREY, apply_theme
 # Scores at or above this are drawn in the accent color as "heavily processed".
 HEAVY_THRESHOLD: float = 0.8
 
+# Same y range in every panel so bar heights compare directly across stores.
+MAX_SHARE_PCT: int = 30
+
 
 def build_store_plot(
     histogram: pd.DataFrame, medians: pd.DataFrame, n_items: int
@@ -38,7 +41,11 @@ def build_store_plot(
                     title="Food Processing Score (0 = least, 1 = most processed)" if is_last else None,
                 ),
                 x2="hi:Q",
-                y=alt.Y("share:Q", title="% of items"),
+                y=alt.Y(
+                    "share:Q",
+                    title="% of items",
+                    scale=alt.Scale(domain=[0, MAX_SHARE_PCT]),
+                ),
                 color=alt.condition(
                     f"datum.lo >= {HEAVY_THRESHOLD}", alt.value(ACCENT), alt.value(GREY)
                 ),
