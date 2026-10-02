@@ -12,6 +12,12 @@ from project1.config import DATA_PATH, EXCLUDED_CATEGORIES, MIN_CATEGORY_ITEMS
 STORE_ORDER: tuple[str, ...] = ("WholeFoods", "Walmart", "Target")
 STORE_LABELS: dict[str, str] = {"WholeFoods": "Whole Foods", "Walmart": "Walmart", "Target": "Target"}
 
+# Sugar per 100 g of product cannot exceed 100 g, so larger values are entry errors.
+MAX_SUGAR_G_PER_100G: float = 100.0
+
+# Readable names for the dataset's FPro_class codes on the x-axis.
+CLASS_LABELS: dict[int, str] = {0: "0: least processed", 1: "1", 2: "2", 3: "3: ultra-processed"}
+
 # price percal is dollars per kcal; the chart reports cents per 100 kcal.
 DOLLARS_PER_KCAL_TO_CENTS_PER_100KCAL: int = 100 * 100
 
@@ -125,3 +131,31 @@ def store_medians(df: pd.DataFrame) -> pd.DataFrame:
     )
     out["text"] = "median " + out["med"].astype(str)
     return out
+
+
+def sugar_by_class(
+    df: pd.DataFrame, max_sugar: float = MAX_SUGAR_G_PER_100G
+) -> tuple[pd.DataFrame, int]:
+    """Summarize sugar content within each processing class.
+
+    Args:
+        df: Raw GroceryDB table.
+        max_sugar: Rows with more sugar than this (g per 100 g) are removed as errors.
+
+    Returns:
+        A tuple of the summary and the number of rows removed. The summary has
+        columns ``label``, ``q1``, ``med``, ``q3`` and ``n``, one row per class.
+    """
+    valid = df[df["Sugars, total"].notna() & (df["Sugars, total"] <= max_sugar)]
+    summary = (
+        valid.groupby("FPro_class")["Sugars, total"]
+        .agg(
+            q1=lambda v: v.quantile(0.25),
+            med="median",
+            q3=lambda v: v.quantile(0.75),
+            n="size",
+        )
+        .reset_index()
+    )
+    summary["label"] = summary["FPro_class"].astype(int).map(CLASS_LABELS)
+    return summary, len(df) - len(valid)

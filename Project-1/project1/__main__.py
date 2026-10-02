@@ -10,9 +10,11 @@ from project1.data import (
     log_linear_trend,
     store_histogram,
     store_medians,
+    sugar_by_class,
 )
 from project1.price_plot import build_price_plot
 from project1.store_plot import build_store_plot
+from project1.sugar_plot import build_sugar_plot
 
 
 def save(chart: alt.TopLevelMixin, name: str) -> None:
@@ -30,6 +32,8 @@ def main() -> None:
     print(f"each +0.1 processing score multiplies price per calorie by {price_ratio:.2f}")
     save(build_price_plot(summary, trend), "plot1_price_vs_processing.png")
     save(build_store_plot(store_histogram(df), store_medians(df), len(df)), "plot2_processing_by_store.png")
+    sugar, _ = sugar_by_class(df)
+    save(build_sugar_plot(sugar), "plot3_sugar_by_class.png")
 
 
 if __name__ == "__main__":
