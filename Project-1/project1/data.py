@@ -15,8 +15,14 @@ STORE_LABELS: dict[str, str] = {"WholeFoods": "Whole Foods", "Walmart": "Walmart
 # Sugar per 100 g of product cannot exceed 100 g, so larger values are entry errors.
 MAX_SUGAR_G_PER_100G: float = 100.0
 
-# Readable names for the dataset's FPro_class codes on the x-axis.
-CLASS_LABELS: dict[int, str] = {0: "0: least processed", 1: "1", 2: "2", 3: "3: ultra-processed"}
+# Class names follow the course's description of the NOVA classification.
+# A newline in a name wraps the axis label onto two lines.
+CLASS_LABELS: dict[int, str] = {
+    0: "0: unprocessed or\nminimally processed",
+    1: "1: processed culinary\ningredients",
+    2: "2: processed\nfoods",
+    3: "3: ultra-processed\nfood and drink",
+}
 
 # price percal is dollars per kcal; the chart reports cents per 100 kcal.
 DOLLARS_PER_KCAL_TO_CENTS_PER_100KCAL: int = 100 * 100

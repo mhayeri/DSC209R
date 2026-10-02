@@ -29,8 +29,8 @@ def build_sugar_plot(summary: pd.DataFrame, n_removed: int) -> alt.TopLevelMixin
     x = alt.X(
         "label:N",
         sort=list(summary["label"]),
-        title="Processing class (dataset's NOVA-style FPro_class)",
-        axis=alt.Axis(labelAngle=0),
+        title="Processing class (predicted NOVA classification)",
+        axis=alt.Axis(labelAngle=0, labelLineHeight=14, labelExpr="split(datum.label, '\\n')"),
     )
     iqr = (
         alt.Chart(summary)
@@ -51,10 +51,10 @@ def build_sugar_plot(summary: pd.DataFrame, n_removed: int) -> alt.TopLevelMixin
     other_median = summary["med"].drop(summary["med"].idxmax()).max()
     title = alt.TitleParams(
         "Sugar jumps only in the ultra-processed class",
-        subtitle=(
-            "Grey bar = middle 50% of items (25th-75th percentile); red tick = median "
-            f"(labeled; {_one_decimal(top_median)} g in class 3 vs {_one_decimal(other_median)} g or less elsewhere). "
-            f"Items with sugar > 100 g/100 g (data errors, {n_removed} rows) removed."
-        ),
+        subtitle=[
+            "Grey bar = middle 50% of items (25th-75th percentile); red tick = median, labeled "
+            f"({_one_decimal(top_median)} g in class 3 vs {_one_decimal(other_median)} g or less elsewhere).",
+            f"Items with sugar > 100 g/100 g (data errors, {n_removed} rows) removed.",
+        ],
     )
     return apply_theme((iqr + median + median_labels).properties(width=560, height=380, title=title))
