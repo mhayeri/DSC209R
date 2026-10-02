@@ -1,12 +1,19 @@
 """Plot 3: sugar content by processing class."""
 from __future__ import annotations
 
+from decimal import ROUND_HALF_UP, Decimal
+
 import altair as alt
 import pandas as pd
 
 from project1.theme import ACCENT, GREY, apply_theme
 
 BAR_SIZE: int = 60
+
+
+def _one_decimal(value: float) -> str:
+    """Format ``value`` to one decimal, rounding half up like the chart's own labels."""
+    return str(Decimal(str(value)).quantize(Decimal("0.1"), rounding=ROUND_HALF_UP))
 
 
 def build_sugar_plot(summary: pd.DataFrame, n_removed: int) -> alt.TopLevelMixin:
@@ -46,7 +53,7 @@ def build_sugar_plot(summary: pd.DataFrame, n_removed: int) -> alt.TopLevelMixin
         "Sugar jumps only in the ultra-processed class",
         subtitle=(
             "Grey bar = middle 50% of items (25th-75th percentile); red tick = median "
-            f"(labeled; {top_median:.1f} g in class 3 vs {other_median:.1f} g or less elsewhere). "
+            f"(labeled; {_one_decimal(top_median)} g in class 3 vs {_one_decimal(other_median)} g or less elsewhere). "
             f"Items with sugar > 100 g/100 g (data errors, {n_removed} rows) removed."
         ),
     )
