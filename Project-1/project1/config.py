@@ -10,8 +10,12 @@ OUTPUT_DIR: Path = PROJECT_ROOT / "outputs"
 # Rendered PNGs are saved at this multiple of the chart's pixel size.
 SCALE_FACTOR: int = 2
 
-# Categories with fewer priced items than this are too thin for a stable median.
-MIN_CATEGORY_ITEMS: int = 20
+# Aisles with fewer priced items than this are too thin to split into thirds.
+MIN_AISLE_ITEMS: int = 60
+
+# An aisle's least- and most-processed thirds must differ by at least this much in
+# median processing score, or there is no real processing contrast to compare.
+MIN_THIRDS_GAP: float = 0.1
 
 # Coffee beans are sold with ~0 kcal listed, which makes price per calorie meaningless.
 EXCLUDED_CATEGORIES: tuple[str, ...] = ("coffee-beans-wf",)

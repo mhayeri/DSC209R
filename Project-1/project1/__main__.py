@@ -5,15 +5,14 @@ import altair as alt
 
 from project1.checkpoint import build_checkpoint_pdf
 from project1.config import OUTPUT_DIR, PROJECT_ROOT, SCALE_FACTOR
+from project1.aisle_price_plot import build_aisle_price_plot
 from project1.data import (
-    category_price_summary,
+    aisle_price_thirds,
     load_grocerydb,
-    log_linear_trend,
     store_histogram,
     store_medians,
     sugar_by_class,
 )
-from project1.price_plot import build_price_plot
 from project1.store_plot import build_store_plot
 from project1.sugar_plot import build_sugar_plot
 
@@ -28,10 +27,9 @@ def save(chart: alt.TopLevelMixin, name: str) -> None:
 def main() -> None:
     """Load the data and render every chart."""
     df = load_grocerydb()
-    summary = category_price_summary(df)
-    trend, price_ratio = log_linear_trend(summary)
-    print(f"each +0.1 processing score multiplies price per calorie by {price_ratio:.2f}")
-    save(build_price_plot(summary, trend), "plot1_price_vs_processing.png")
+    thirds = aisle_price_thirds(df)
+    print(f"least processed third costs more in {(thirds['ratio'] > 1).sum()} of {len(thirds)} aisles")
+    save(build_aisle_price_plot(thirds), "plot1_aisle_price.png")
     save(build_store_plot(store_histogram(df), store_medians(df), len(df)), "plot2_processing_by_store.png")
     sugar, n_removed = sugar_by_class(df)
     save(build_sugar_plot(sugar, n_removed), "plot3_sugar_by_class.png")
@@ -40,7 +38,7 @@ def main() -> None:
     if paragraph.exists():
         build_checkpoint_pdf(
             [
-                ("Plot A", OUTPUT_DIR / "plot1_price_vs_processing.png"),
+                ("Plot A", OUTPUT_DIR / "plot1_aisle_price.png"),
                 ("Plot B", OUTPUT_DIR / "plot2_processing_by_store.png"),
                 ("Plot C", OUTPUT_DIR / "plot3_sugar_by_class.png"),
             ],

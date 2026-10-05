@@ -6,7 +6,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from project1.config import DATA_PATH, EXCLUDED_CATEGORIES, MIN_CATEGORY_ITEMS
+from project1.config import DATA_PATH, EXCLUDED_CATEGORIES, MIN_AISLE_ITEMS, MIN_THIRDS_GAP
 
 # Display order and names for the store panels, top to bottom.
 STORE_ORDER: tuple[str, ...] = ("WholeFoods", "Walmart", "Target")
@@ -22,6 +22,63 @@ CLASS_LABELS: dict[int, str] = {
     1: "1: processed culinary\ningredients",
     2: "2: processed\nfoods",
     3: "3: ultra-processed\nfood and drink",
+}
+
+# Readable aisle names. Categories ending in -wf exist only in the Whole Foods data
+# and overlap a general category, so they say "(WF)" to keep the two apart.
+AISLE_NAMES: dict[str, str] = {
+    "baby-food": "Baby food",
+    "baking": "Baking",
+    "bread": "Bread",
+    "breakfast": "Breakfast foods",
+    "cakes": "Cakes",
+    "cereal": "Cereal",
+    "cheese": "Cheese",
+    "coffee-beans-wf": "Coffee beans (WF)",
+    "cookies-biscuit": "Cookies & biscuits",
+    "culinary-ingredients": "Oils, vinegar & cooking basics",
+    "dairy-yogurt-drink": "Yogurt & dairy drinks",
+    "dressings": "Dressings",
+    "drink-coffee": "Coffee drinks",
+    "drink-juice": "Juice",
+    "drink-juice-wf": "Juice (WF)",
+    "drink-shakes-other": "Shakes & other drinks",
+    "drink-soft-energy-mixes": "Soda, energy & drink mixes",
+    "drink-tea": "Tea",
+    "drink-water-wf": "Water (WF)",
+    "eggs-wf": "Eggs (WF)",
+    "ice-cream-dessert": "Ice cream & frozen dessert",
+    "jerky": "Jerky",
+    "mac-cheese": "Mac & cheese",
+    "meat-packaged": "Packaged meat",
+    "meat-poultry-wf": "Fresh meat & poultry (WF)",
+    "milk-milk-substitute": "Milk & milk substitutes",
+    "muffins-bagels": "Muffins & bagels",
+    "nuts-seeds-wf": "Nuts & seeds (WF)",
+    "pasta-noodles": "Pasta & noodles",
+    "pastry-chocolate-candy": "Pastry, chocolate & candy",
+    "pizza": "Pizza",
+    "prepared-meals-dishes": "Prepared meals",
+    "produce-beans-wf": "Produce & beans (WF)",
+    "produce-packaged": "Packaged produce",
+    "pudding-jello": "Pudding & jello",
+    "rice-grains-packaged": "Packaged rice & grains",
+    "rice-grains-wf": "Rice & grains (WF)",
+    "rolls-buns-wraps": "Rolls, buns & wraps",
+    "salad": "Salad",
+    "sauce-all": "Sauces",
+    "sausage-bacon": "Sausage & bacon",
+    "seafood": "Seafood",
+    "seafood-wf": "Seafood (WF)",
+    "snacks-bars": "Snack bars",
+    "snacks-chips": "Chips",
+    "snacks-dips-salsa": "Dips & salsa",
+    "snacks-mixes-crackers": "Crackers & snack mixes",
+    "snacks-nuts-seeds": "Snack nuts & seeds",
+    "snacks-popcorn": "Popcorn",
+    "soup-stew": "Soup & stew",
+    "spices-seasoning": "Spices & seasoning",
+    "spread-squeeze": "Spreads",
 }
 
 # price percal is dollars per kcal; the chart reports cents per 100 kcal.
@@ -40,54 +97,56 @@ def load_grocerydb(path: Path = DATA_PATH) -> pd.DataFrame:
     return pd.read_csv(path)
 
 
-def category_price_summary(
+def aisle_label(category: str) -> str:
+    """Readable aisle name for a GroceryDB category, falling back to the raw name."""
+    return AISLE_NAMES.get(category, category.replace("-", " "))
+
+
+def aisle_price_thirds(
     df: pd.DataFrame,
-    min_items: int = MIN_CATEGORY_ITEMS,
+    min_items: int = MIN_AISLE_ITEMS,
+    min_gap: float = MIN_THIRDS_GAP,
     excluded: tuple[str, ...] = EXCLUDED_CATEGORIES,
 ) -> pd.DataFrame:
-    """Aggregate products to one row per food category.
+    """Compare the cheapest-to-eat end of each aisle with its least processed end.
 
-    Only products with a price per calorie are used. Categories with fewer than
-    ``min_items`` such products, and any category in ``excluded``, are dropped.
+    Within each category, priced items are split by Food Processing Score into
+    the least processed third and the most processed third, and the median
+    price per 100 kcal of each third is taken.
 
     Args:
         df: Raw GroceryDB table.
-        min_items: Minimum number of priced products a category needs.
+        min_items: Minimum number of priced items an aisle needs.
+        min_gap: Minimum difference in median processing score between the two thirds.
         excluded: Category names to remove regardless of size.
 
     Returns:
-        Columns ``category``, ``label``, ``n``, ``fpro`` (median processing score)
-        and ``cents`` (median price in US cents per 100 kcal).
+        One row per aisle with ``category``, ``label``, ``n``, ``fpro_low``,
+        ``fpro_high`` (median score of each third), ``cents_low``, ``cents_high``
+        (median US cents per 100 kcal of each third) and ``ratio`` (low / high).
     """
-    priced = df.dropna(subset=["price percal"])
-    summary = (
-        priced.groupby("category")
-        .agg(n=("FPro", "size"), fpro=("FPro", "median"), ppc=("price percal", "median"))
-        .reset_index()
-    )
-    summary = summary[(summary["n"] >= min_items) & ~summary["category"].isin(excluded)].copy()
-    summary["cents"] = summary["ppc"] * DOLLARS_PER_KCAL_TO_CENTS_PER_100KCAL
-    summary["label"] = (
-        summary["category"].str.replace("-wf", "", regex=False).str.replace("-", " ")
-    )
-    return summary.drop(columns="ppc").reset_index(drop=True)
-
-
-def log_linear_trend(summary: pd.DataFrame, n_points: int = 50) -> tuple[pd.DataFrame, float]:
-    """Fit log10(price) against processing score across categories.
-
-    Args:
-        summary: Output of :func:`category_price_summary`.
-        n_points: Number of evenly spaced points to return for drawing the line.
-
-    Returns:
-        A tuple of the fitted line (columns ``fpro`` and ``cents``) and the
-        multiplicative change in price for each +0.1 of processing score.
-    """
-    slope, intercept = np.polyfit(summary["fpro"], np.log10(summary["cents"]), 1)
-    xs = np.linspace(summary["fpro"].min(), summary["fpro"].max(), n_points)
-    line = pd.DataFrame({"fpro": xs, "cents": 10 ** (intercept + slope * xs)})
-    return line, float(10 ** (slope * 0.1))
+    priced = df[(df["price percal"] > 0) & ~df["category"].isin(excluded)]
+    rows: list[dict[str, float | str | int]] = []
+    for category, items in priced.groupby("category"):
+        if len(items) < min_items:
+            continue
+        low = items[items["FPro"] <= items["FPro"].quantile(1 / 3)]
+        high = items[items["FPro"] >= items["FPro"].quantile(2 / 3)]
+        rows.append(
+            {
+                "category": category,
+                "label": aisle_label(category),
+                "n": len(items),
+                "fpro_low": low["FPro"].median(),
+                "fpro_high": high["FPro"].median(),
+                "cents_low": low["price percal"].median() * DOLLARS_PER_KCAL_TO_CENTS_PER_100KCAL,
+                "cents_high": high["price percal"].median() * DOLLARS_PER_KCAL_TO_CENTS_PER_100KCAL,
+            }
+        )
+    thirds = pd.DataFrame(rows)
+    thirds = thirds[thirds["fpro_high"] - thirds["fpro_low"] >= min_gap].copy()
+    thirds["ratio"] = thirds["cents_low"] / thirds["cents_high"]
+    return thirds.sort_values("ratio", ascending=False).reset_index(drop=True)
 
 
 def store_histogram(df: pd.DataFrame, n_bins: int = 20) -> pd.DataFrame:
