@@ -24,6 +24,14 @@ CLASS_LABELS: dict[int, str] = {
     3: "3: ultra-processed\nfood and drink",
 }
 
+# Product names matching this are counted as organic.
+ORGANIC_PATTERN: str = r"\borganics?\b"
+ORGANIC_GROUP: str = "Name says organic"
+OTHER_GROUP: str = "Everything else"
+
+# Cells per side of each unit chart grid; 10 gives one cell per percent.
+GRID_SIDE: int = 10
+
 # Readable aisle names. Categories ending in -wf exist only in the Whole Foods data
 # and overlap a general category, so they say "(WF)" to keep the two apart.
 AISLE_NAMES: dict[str, str] = {
@@ -149,53 +157,51 @@ def aisle_price_thirds(
     return thirds.sort_values("ratio", ascending=False).reset_index(drop=True)
 
 
-def store_histogram(df: pd.DataFrame, n_bins: int = 20) -> pd.DataFrame:
-    """Bin the processing score within each store.
+def is_organic(df: pd.DataFrame) -> pd.Series:
+    """Flag products whose name says "organic" or "organics" (any case)."""
+    return df["name"].str.contains(ORGANIC_PATTERN, case=False, regex=True)
 
-    Counts are converted to a share of that store's items so stores with very
-    different catalog sizes can be compared on one scale.
+
+def organic_class_grid(df: pd.DataFrame, side: int = GRID_SIDE) -> pd.DataFrame:
+    """Lay out each group's processing-class mix as a square grid of cells.
+
+    Each group (organic vs everything else) gets ``side * side`` cells, one per
+    percent when ``side`` is 10. Cell counts per class use largest-remainder
+    rounding so they always add up to the full grid. Cells are filled row by
+    row from the top, least processed class first.
 
     Args:
         df: Raw GroceryDB table.
-        n_bins: Number of equal-width bins between 0 and 1.
+        side: Cells per row and column.
 
     Returns:
-        Columns ``store_label``, ``lo``, ``hi`` (bin edges) and ``share`` (percent).
+        One row per cell with ``group``, ``row``, ``col``, ``nova`` (class
+        number), ``class_label``, ``n_items`` (group size) and ``pct_ultra``.
     """
-    edges = np.linspace(0, 1, n_bins + 1)
-    rows: list[dict[str, float | str]] = []
-    for store in STORE_ORDER:
-        counts, _ = np.histogram(df.loc[df["store"] == store, "FPro"], bins=edges)
-        for lo, hi, count in zip(edges[:-1], edges[1:], counts):
+    cells_total = side * side
+    groups = df.assign(group=np.where(is_organic(df), ORGANIC_GROUP, OTHER_GROUP))
+    rows: list[dict[str, float | int | str]] = []
+    for group in (ORGANIC_GROUP, OTHER_GROUP):
+        classes = groups.loc[groups["group"] == group, "FPro_class"].astype(int)
+        shares = classes.value_counts(normalize=True).reindex(range(4), fill_value=0)
+        exact = shares * cells_total
+        cells = np.floor(exact).astype(int)
+        leftover = cells_total - cells.sum()
+        cells[(exact - cells).sort_values(ascending=False).index[:leftover]] += 1
+        sequence = [nova for nova in range(4) for _ in range(cells[nova])]
+        for i, nova in enumerate(sequence):
             rows.append(
                 {
-                    "store_label": STORE_LABELS[store],
-                    "lo": lo,
-                    "hi": hi,
-                    "share": count / counts.sum() * 100,
+                    "group": group,
+                    "row": i // side,
+                    "col": i % side,
+                    "nova": nova,
+                    "class_label": CLASS_LABELS[nova].replace("\n", " "),
+                    "n_items": len(classes),
+                    "pct_ultra": shares[3] * 100,
                 }
             )
     return pd.DataFrame(rows)
-
-
-def store_medians(df: pd.DataFrame) -> pd.DataFrame:
-    """Median processing score for each store.
-
-    Args:
-        df: Raw GroceryDB table.
-
-    Returns:
-        Columns ``store_label``, ``med`` and ``text`` (a ready-made annotation).
-    """
-    meds = df.groupby("store")["FPro"].median().round(2)
-    out = pd.DataFrame(
-        {
-            "store_label": [STORE_LABELS[s] for s in STORE_ORDER],
-            "med": [meds[s] for s in STORE_ORDER],
-        }
-    )
-    out["text"] = "median " + out["med"].astype(str)
-    return out
 
 
 def sugar_by_class(
