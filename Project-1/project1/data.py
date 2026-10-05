@@ -8,10 +8,6 @@ import pandas as pd
 
 from project1.config import DATA_PATH, EXCLUDED_CATEGORIES, MIN_AISLE_ITEMS, MIN_THIRDS_GAP
 
-# Display order and names for the store panels, top to bottom.
-STORE_ORDER: tuple[str, ...] = ("WholeFoods", "Walmart", "Target")
-STORE_LABELS: dict[str, str] = {"WholeFoods": "Whole Foods", "Walmart": "Walmart", "Target": "Target"}
-
 # Sugar per 100 g of product cannot exceed 100 g, so larger values are entry errors.
 MAX_SUGAR_G_PER_100G: float = 100.0
 
@@ -28,6 +24,9 @@ CLASS_LABELS: dict[int, str] = {
 ORGANIC_PATTERN: str = r"\borganics?\b"
 ORGANIC_GROUP: str = "Name says organic"
 OTHER_GROUP: str = "Everything else"
+
+# An aisle needs this many organic and this many other items to compare the two.
+MIN_ORGANIC_COMPARE_ITEMS: int = 15
 
 # Cells per side of each unit chart grid; 10 gives one cell per percent.
 GRID_SIDE: int = 10
@@ -202,6 +201,27 @@ def organic_class_grid(df: pd.DataFrame, side: int = GRID_SIDE) -> pd.DataFrame:
                 }
             )
     return pd.DataFrame(rows)
+
+
+def organic_within_aisle_gap(
+    df: pd.DataFrame, min_items: int = MIN_ORGANIC_COMPARE_ITEMS
+) -> tuple[float, int]:
+    """How much lower organic items score than other items in the same aisle.
+
+    Args:
+        df: Raw GroceryDB table.
+        min_items: Items each side of the comparison needs within an aisle.
+
+    Returns:
+        The median, across aisles, of (other median score - organic median
+        score), and the number of aisles compared.
+    """
+    flagged = df.assign(organic=is_organic(df))
+    counts = flagged.groupby(["category", "organic"]).size().unstack(fill_value=0)
+    medians = flagged.groupby(["category", "organic"])["FPro"].median().unstack()
+    usable = (counts[True] >= min_items) & (counts[False] >= min_items)
+    gaps = (medians[False] - medians[True])[usable]
+    return float(gaps.median()), int(usable.sum())
 
 
 def sugar_by_class(
