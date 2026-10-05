@@ -32,14 +32,17 @@ This renders the three charts and the checkpoint PDF into `outputs/`:
 
 | File | Takeaway |
 |---|---|
-| `plot1_price_vs_processing.png` | The more processed the food, the cheaper its calories |
-| `plot2_processing_by_store.png` | Whole Foods stocks far more minimally processed food than Walmart or Target |
-| `plot3_sugar_by_class.png` | Sugar jumps only in the ultra-processed class |
+| `plot1_aisle_price.png` | In 37 of 47 aisles, the least processed third of items costs more per calorie than the most processed third |
+| `plot2_organic_mix.png` | 56% of products with "organic" in the name are still ultra-processed (vs 79% of the rest) |
+| `plot3_aisle_strip.png` | In 16 of the 20 biggest aisles, at least 80% of products are ultra-processed |
 
 ## Data notes
 
-- The CSV has 26,250 products. Several nutrient columns contain impossible values
-  (for example sodium above 500,000 per 100 g), so each chart states what it filters.
-- Plot 1 uses category medians for categories with 20+ items that have a price per
-  calorie, and leaves out coffee beans (listed with about 0 kcal).
-- Plot 3 removes 38 rows with more than 100 g of sugar per 100 g.
+- The CSV has 26,250 products from Walmart, Target and Whole Foods.
+- Plot 1 uses aisles with 60+ priced items whose least and most processed thirds
+  differ by at least 0.1 in median score, and leaves out coffee beans (listed at
+  about 0 kcal).
+- Plot 2 counts a product as organic when its name contains "organic" or
+  "organics". Each grid uses largest-remainder rounding so its cells add up to 100.
+- Plot 3 shows every product in the 20 aisles with the most items. Vertical
+  position inside a row is random jitter with a fixed seed.
