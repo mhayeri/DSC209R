@@ -8,11 +8,15 @@ import pandas as pd
 
 from project1.config import DATA_PATH, EXCLUDED_CATEGORIES, MIN_AISLE_ITEMS, MIN_THIRDS_GAP
 
-# Sugar per 100 g of product cannot exceed 100 g, so larger values are entry errors.
-MAX_SUGAR_G_PER_100G: float = 100.0
+# Plot 3 shows this many of the largest aisles.
+STRIP_AISLES: int = 20
+
+# Products are spread up to this fraction of a row above and below its center.
+JITTER_HALF_HEIGHT: float = 0.32
+JITTER_SEED: int = 209
 
 # Class names follow the course's description of the NOVA classification.
-# A newline in a name wraps the axis label onto two lines.
+# A newline marks where a long name may wrap.
 CLASS_LABELS: dict[int, str] = {
     0: "0: unprocessed or\nminimally processed",
     1: "1: processed culinary\ningredients",
@@ -224,29 +228,37 @@ def organic_within_aisle_gap(
     return float(gaps.median()), int(usable.sum())
 
 
-def sugar_by_class(
-    df: pd.DataFrame, max_sugar: float = MAX_SUGAR_G_PER_100G
-) -> tuple[pd.DataFrame, int]:
-    """Summarize sugar content within each processing class.
+def aisle_strip(
+    df: pd.DataFrame, n_aisles: int = STRIP_AISLES, seed: int = JITTER_SEED
+) -> tuple[pd.DataFrame, pd.DataFrame]:
+    """Every product in the largest aisles, ready to draw as a jittered strip.
+
+    Aisles are ordered from the lowest to the highest share of ultra-processed
+    items. Each product gets a fixed random vertical offset so dots with the
+    same score spread out instead of stacking.
 
     Args:
         df: Raw GroceryDB table.
-        max_sugar: Rows with more sugar than this (g per 100 g) are removed as errors.
+        n_aisles: How many of the largest aisles (by item count) to keep.
+        seed: Seed for the vertical jitter, so the chart renders the same every time.
 
     Returns:
-        A tuple of the summary and the number of rows removed. The summary has
-        columns ``label``, ``q1``, ``med``, ``q3`` and ``n``, one row per class.
+        A tuple of ``items`` (one row per product: ``label``, ``row``, ``y``,
+        ``FPro``, ``ultra``) and ``aisles`` (one row per aisle: ``label``,
+        ``row``, ``n``, ``pct_ultra``).
     """
-    valid = df[df["Sugars, total"].notna() & (df["Sugars, total"] <= max_sugar)]
-    summary = (
-        valid.groupby("FPro_class")["Sugars, total"]
-        .agg(
-            q1=lambda v: v.quantile(0.25),
-            med="median",
-            q3=lambda v: v.quantile(0.75),
-            n="size",
-        )
+    largest = df["category"].value_counts().head(n_aisles).index
+    kept = df[df["category"].isin(largest)].assign(ultra=lambda d: d["FPro_class"] == 3)
+    aisles = (
+        kept.groupby("category")
+        .agg(n=("FPro", "size"), pct_ultra=("ultra", "mean"))
+        .sort_values("pct_ultra")
         .reset_index()
     )
-    summary["label"] = summary["FPro_class"].astype(int).map(CLASS_LABELS)
-    return summary, len(df) - len(valid)
+    aisles["pct_ultra"] *= 100
+    aisles["row"] = range(len(aisles))
+    aisles["label"] = aisles["category"].map(aisle_label)
+    rng = np.random.default_rng(seed)
+    items = kept.merge(aisles[["category", "row", "label"]], on="category")
+    items["y"] = items["row"] + rng.uniform(-JITTER_HALF_HEIGHT, JITTER_HALF_HEIGHT, len(items))
+    return items[["label", "row", "y", "FPro", "ultra"]], aisles.drop(columns="category")

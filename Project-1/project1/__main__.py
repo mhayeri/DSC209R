@@ -4,17 +4,17 @@ from __future__ import annotations
 import altair as alt
 
 from project1.aisle_price_plot import build_aisle_price_plot
+from project1.aisle_strip_plot import build_aisle_strip_plot
 from project1.checkpoint import build_checkpoint_pdf
 from project1.config import OUTPUT_DIR, PROJECT_ROOT, SCALE_FACTOR
 from project1.data import (
     aisle_price_thirds,
+    aisle_strip,
     load_grocerydb,
     organic_class_grid,
     organic_within_aisle_gap,
-    sugar_by_class,
 )
 from project1.organic_plot import build_organic_plot
-from project1.sugar_plot import build_sugar_plot
 
 
 def save(chart: alt.TopLevelMixin, name: str) -> None:
@@ -32,8 +32,8 @@ def main() -> None:
     save(build_aisle_price_plot(thirds), "plot1_aisle_price.png")
     aisle_gap, n_compared = organic_within_aisle_gap(df)
     save(build_organic_plot(organic_class_grid(df), aisle_gap, n_compared), "plot2_organic_mix.png")
-    sugar, n_removed = sugar_by_class(df)
-    save(build_sugar_plot(sugar, n_removed), "plot3_sugar_by_class.png")
+    items, aisles = aisle_strip(df)
+    save(build_aisle_strip_plot(items, aisles), "plot3_aisle_strip.png")
 
     paragraph = PROJECT_ROOT / "writeup" / "checkpoint_paragraph.md"
     if paragraph.exists():
@@ -41,7 +41,7 @@ def main() -> None:
             [
                 ("Plot A", OUTPUT_DIR / "plot1_aisle_price.png"),
                 ("Plot B", OUTPUT_DIR / "plot2_organic_mix.png"),
-                ("Plot C", OUTPUT_DIR / "plot3_sugar_by_class.png"),
+                ("Plot C", OUTPUT_DIR / "plot3_aisle_strip.png"),
             ],
             paragraph,
             OUTPUT_DIR / "checkpoint_submission.pdf",
