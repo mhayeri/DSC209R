@@ -4,12 +4,12 @@ from __future__ import annotations
 import altair as alt
 
 from project1.aisle_price_plot import build_aisle_price_plot
-from project1.aisle_strip_plot import build_aisle_strip_plot
+from project1.aisle_share_plot import build_aisle_share_plot
 from project1.checkpoint import build_checkpoint_pdf
 from project1.config import OUTPUT_DIR, PROJECT_ROOT, SCALE_FACTOR
 from project1.data import (
     aisle_price_thirds,
-    aisle_strip,
+    aisle_ultra_share,
     load_grocerydb,
     organic_class_grid,
 )
@@ -30,8 +30,9 @@ def main() -> None:
     print(f"least processed third costs more in {(thirds['ratio'] > 1).sum()} of {len(thirds)} aisles")
     save(build_aisle_price_plot(thirds), "plot1_aisle_price.png")
     save(build_organic_plot(organic_class_grid(df)), "plot2_organic_mix.png")
-    items, aisles = aisle_strip(df)
-    save(build_aisle_strip_plot(items, aisles), "plot3_aisle_strip.png")
+    shares = aisle_ultra_share(df)
+    n_products = int(df["category"].value_counts().head(len(shares)).sum())
+    save(build_aisle_share_plot(shares, n_products), "plot3_aisle_ultra_share.png")
 
     paragraph = PROJECT_ROOT / "writeup" / "checkpoint_paragraph.md"
     if paragraph.exists():
@@ -39,7 +40,7 @@ def main() -> None:
             [
                 ("Plot A", OUTPUT_DIR / "plot1_aisle_price.png"),
                 ("Plot B", OUTPUT_DIR / "plot2_organic_mix.png"),
-                ("Plot C", OUTPUT_DIR / "plot3_aisle_strip.png"),
+                ("Plot C", OUTPUT_DIR / "plot3_aisle_ultra_share.png"),
             ],
             paragraph,
             OUTPUT_DIR / "checkpoint_submission.pdf",

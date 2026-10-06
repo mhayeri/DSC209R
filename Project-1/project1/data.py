@@ -3,26 +3,12 @@ from __future__ import annotations
 
 from pathlib import Path
 
-import numpy as np
 import pandas as pd
 
 from project1.config import DATA_PATH, EXCLUDED_CATEGORIES, MIN_AISLE_ITEMS, MIN_THIRDS_GAP
 
 # Plot 3 shows this many of the largest aisles.
-STRIP_AISLES: int = 20
-
-# Products are spread up to this fraction of a row above and below its center.
-JITTER_HALF_HEIGHT: float = 0.32
-JITTER_SEED: int = 209
-
-# Class names follow the course's description of the NOVA classification.
-# A newline marks where a long name may wrap.
-CLASS_LABELS: dict[int, str] = {
-    0: "0: unprocessed or\nminimally processed",
-    1: "1: processed culinary\ningredients",
-    2: "2: processed\nfoods",
-    3: "3: ultra-processed\nfood and drink",
-}
+SHARE_AISLES: int = 20
 
 # Product names matching this are counted as organic.
 ORGANIC_PATTERN: str = r"\borganics?\b"
@@ -197,37 +183,26 @@ def organic_class_grid(df: pd.DataFrame, side: int = GRID_SIDE) -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
-def aisle_strip(
-    df: pd.DataFrame, n_aisles: int = STRIP_AISLES, seed: int = JITTER_SEED
-) -> tuple[pd.DataFrame, pd.DataFrame]:
-    """Every product in the largest aisles, ready to draw as a jittered strip.
-
-    Aisles are ordered from the lowest to the highest share of ultra-processed
-    items. Each product gets a fixed random vertical offset so dots with the
-    same score spread out instead of stacking.
+def aisle_ultra_share(df: pd.DataFrame, n_aisles: int = SHARE_AISLES) -> pd.DataFrame:
+    """Share of ultra-processed products in each of the largest aisles.
 
     Args:
         df: Raw GroceryDB table.
-        n_aisles: How many of the largest aisles (by item count) to keep.
-        seed: Seed for the vertical jitter, so the chart renders the same every time.
+        n_aisles: How many of the largest aisles (by product count) to keep.
 
     Returns:
-        A tuple of ``items`` (one row per product: ``label``, ``row``, ``y``,
-        ``FPro``, ``ultra``) and ``aisles`` (one row per aisle: ``label``,
-        ``row``, ``n``, ``pct_ultra``).
+        One row per aisle with ``label``, ``n`` and ``pct_ultra``, sorted from
+        the highest share to the lowest.
     """
     largest = df["category"].value_counts().head(n_aisles).index
-    kept = df[df["category"].isin(largest)].assign(ultra=lambda d: d["FPro_class"] == 3)
-    aisles = (
-        kept.groupby("category")
+    kept = df[df["category"].isin(largest)]
+    shares = (
+        kept.assign(ultra=kept["FPro_class"] == 3)
+        .groupby("category")
         .agg(n=("FPro", "size"), pct_ultra=("ultra", "mean"))
-        .sort_values("pct_ultra")
+        .sort_values("pct_ultra", ascending=False)
         .reset_index()
     )
-    aisles["pct_ultra"] *= 100
-    aisles["row"] = range(len(aisles))
-    aisles["label"] = aisles["category"].map(aisle_label)
-    rng = np.random.default_rng(seed)
-    items = kept.merge(aisles[["category", "row", "label"]], on="category")
-    items["y"] = items["row"] + rng.uniform(-JITTER_HALF_HEIGHT, JITTER_HALF_HEIGHT, len(items))
-    return items[["label", "row", "y", "FPro", "ultra"]], aisles.drop(columns="category")
+    shares["pct_ultra"] *= 100
+    shares["label"] = shares["category"].map(aisle_label)
+    return shares.drop(columns="category")
