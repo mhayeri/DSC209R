@@ -19,3 +19,19 @@ MIN_THIRDS_GAP: float = 0.1
 
 # Coffee beans are sold with ~0 kcal listed, which makes price per calorie meaningless.
 EXCLUDED_CATEGORIES: tuple[str, ...] = ("coffee-beans-wf",)
+
+# Familiar aisles shown in plot 1, including the three where the pattern flips.
+EVERYDAY_AISLES: tuple[str, ...] = (
+    "soup-stew",
+    "ice-cream-dessert",
+    "drink-juice",
+    "snacks-bars",
+    "bread",
+    "dairy-yogurt-drink",
+    "meat-packaged",
+    "snacks-chips",
+    "cereal",
+    "cheese",
+    "pasta-noodles",
+    "milk-milk-substitute",
+)
