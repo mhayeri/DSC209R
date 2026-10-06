@@ -12,7 +12,6 @@ from project1.data import (
     aisle_strip,
     load_grocerydb,
     organic_class_grid,
-    organic_within_aisle_gap,
 )
 from project1.organic_plot import build_organic_plot
 
@@ -30,8 +29,7 @@ def main() -> None:
     thirds = aisle_price_thirds(df)
     print(f"least processed third costs more in {(thirds['ratio'] > 1).sum()} of {len(thirds)} aisles")
     save(build_aisle_price_plot(thirds), "plot1_aisle_price.png")
-    aisle_gap, n_compared = organic_within_aisle_gap(df)
-    save(build_organic_plot(organic_class_grid(df), aisle_gap, n_compared), "plot2_organic_mix.png")
+    save(build_organic_plot(organic_class_grid(df)), "plot2_organic_mix.png")
     items, aisles = aisle_strip(df)
     save(build_aisle_strip_plot(items, aisles), "plot3_aisle_strip.png")
 

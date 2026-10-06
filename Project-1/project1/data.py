@@ -29,9 +29,6 @@ ORGANIC_PATTERN: str = r"\borganics?\b"
 ORGANIC_GROUP: str = "Name says organic"
 OTHER_GROUP: str = "Everything else"
 
-# An aisle needs this many organic and this many other items to compare the two.
-MIN_ORGANIC_COMPARE_ITEMS: int = 15
-
 # Cells per side of each unit chart grid; 10 gives one cell per percent.
 GRID_SIDE: int = 10
 
@@ -166,66 +163,38 @@ def is_organic(df: pd.DataFrame) -> pd.Series:
 
 
 def organic_class_grid(df: pd.DataFrame, side: int = GRID_SIDE) -> pd.DataFrame:
-    """Lay out each group's processing-class mix as a square grid of cells.
+    """Lay out each group's ultra-processed share as a square grid of cells.
 
     Each group (organic vs everything else) gets ``side * side`` cells, one per
-    percent when ``side`` is 10. Cell counts per class use largest-remainder
-    rounding so they always add up to the full grid. Cells are filled row by
-    row from the top, least processed class first.
+    percent when ``side`` is 10. Cells are filled row by row from the top,
+    with the ultra-processed cells last so they collect at the bottom.
 
     Args:
         df: Raw GroceryDB table.
         side: Cells per row and column.
 
     Returns:
-        One row per cell with ``group``, ``row``, ``col``, ``nova`` (class
-        number), ``class_label``, ``n_items`` (group size) and ``pct_ultra``.
+        One row per cell with ``group``, ``row``, ``col``, ``ultra`` (bool),
+        ``n_items`` (group size) and ``pct_ultra``.
     """
     cells_total = side * side
-    groups = df.assign(group=np.where(is_organic(df), ORGANIC_GROUP, OTHER_GROUP))
-    rows: list[dict[str, float | int | str]] = []
-    for group in (ORGANIC_GROUP, OTHER_GROUP):
-        classes = groups.loc[groups["group"] == group, "FPro_class"].astype(int)
-        shares = classes.value_counts(normalize=True).reindex(range(4), fill_value=0)
-        exact = shares * cells_total
-        cells = np.floor(exact).astype(int)
-        leftover = cells_total - cells.sum()
-        cells[(exact - cells).sort_values(ascending=False).index[:leftover]] += 1
-        sequence = [nova for nova in range(4) for _ in range(cells[nova])]
-        for i, nova in enumerate(sequence):
+    organic = is_organic(df)
+    rows: list[dict[str, float | int | str | bool]] = []
+    for group, members in ((ORGANIC_GROUP, df[organic]), (OTHER_GROUP, df[~organic])):
+        pct_ultra = (members["FPro_class"] == 3).mean() * 100
+        n_ultra = round(pct_ultra * cells_total / 100)
+        for i in range(cells_total):
             rows.append(
                 {
                     "group": group,
                     "row": i // side,
                     "col": i % side,
-                    "nova": nova,
-                    "class_label": CLASS_LABELS[nova].replace("\n", " "),
-                    "n_items": len(classes),
-                    "pct_ultra": shares[3] * 100,
+                    "ultra": i >= cells_total - n_ultra,
+                    "n_items": len(members),
+                    "pct_ultra": pct_ultra,
                 }
             )
     return pd.DataFrame(rows)
-
-
-def organic_within_aisle_gap(
-    df: pd.DataFrame, min_items: int = MIN_ORGANIC_COMPARE_ITEMS
-) -> tuple[float, int]:
-    """How much lower organic items score than other items in the same aisle.
-
-    Args:
-        df: Raw GroceryDB table.
-        min_items: Items each side of the comparison needs within an aisle.
-
-    Returns:
-        The median, across aisles, of (other median score - organic median
-        score), and the number of aisles compared.
-    """
-    flagged = df.assign(organic=is_organic(df))
-    counts = flagged.groupby(["category", "organic"]).size().unstack(fill_value=0)
-    medians = flagged.groupby(["category", "organic"])["FPro"].median().unstack()
-    usable = (counts[True] >= min_items) & (counts[False] >= min_items)
-    gaps = (medians[False] - medians[True])[usable]
-    return float(gaps.median()), int(usable.sum())
 
 
 def aisle_strip(
