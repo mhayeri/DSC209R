@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Projects</title>
+    <link rel="stylesheet" href="../style.css" />
+  </head>
+  <body>
+    <nav>
+      <a href="../">Home</a>
+      <a href="../projects/">Projects</a>
+      <a href="../contact/">Contact</a>
+      <a href="../cv/">CV</a>
+      <a href="https://github.com/mhayeri" target="_blank">GitHub</a>
+    </nav>
+    <h1>Projects</h1>
+
+    <article>
+      <h2>HoopUp</h2>
+      <p>
+        Started May 2026 · Last updated Jul 2026 · Public ·
+        <a href="https://mhayeri.github.io/hoopup/" target="_blank">Live site</a> ·
+        <a href="https://github.com/mhayeri/hoopup" target="_blank">Source</a>
+      </p>
+      <ul>
+        <li>Pickup-basketball app: find nearby courts on a live map, host a game, and RSVP.</li>
+        <li>Court data comes from OpenStreetMap through the Overpass API and is cached on the server.</li>
+        <li>A Postgres trigger enforces the 15-player cap and waitlist atomically, so games can't overbook.</li>
+        <li>Player profiles, friends, favorite courts, and a live "Hooping" status once a game starts.</li>
+        <li>Email/password, Google, and GitHub sign-in, with row-level security on all data.</li>
+      </ul>
+      <div>
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" alt="React" title="React" width="40" />
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" alt="TypeScript" title="TypeScript" width="40" />
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vitejs/vitejs-original.svg" alt="Vite" title="Vite" width="40" />
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg" alt="Tailwind CSS" title="Tailwind CSS" width="40" />
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/supabase/supabase-original.svg" alt="Supabase" title="Supabase" width="40" />
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg" alt="PostgreSQL" title="PostgreSQL" width="40" />
+      </div>
+    </article>
+
+    <article>
+      <h2>The Kitchen Club</h2>
+      <p>Started Jul 2026 · Last updated Sep 2026 · Private · In development</p>
+      <ul>
+        <li>New web product, currently in its foundation phase.</li>
+        <li>Turborepo monorepo with a Next.js app plus shared packages for the UI, domain model, API client, database, and auth.</li>
+        <li>Zod schemas act as the single validation layer and the source of the app's types.</li>
+        <li>Postgres on Neon with Drizzle ORM migrations; Better Auth keeps sessions in its own database.</li>
+        <li>CI runs formatting, linting, type checks, tests, and builds, and database migrations are gated.</li>
+      </ul>
+      <div>
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg" alt="Next.js" title="Next.js" width="40" />
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" alt="TypeScript" title="TypeScript" width="40" />
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg" alt="Tailwind CSS" title="Tailwind CSS" width="40" />
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg" alt="PostgreSQL" title="PostgreSQL" width="40" />
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bun/bun-original.svg" alt="Bun" title="Bun" width="40" />
+      </div>
+    </article>
+  </body>
+</html>
