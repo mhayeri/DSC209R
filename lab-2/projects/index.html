@@ -16,47 +16,119 @@
     </nav>
     <h1>Projects</h1>
 
-    <article>
-      <h2>HoopUp</h2>
-      <p>
-        Started May 2026 · Last updated Jul 2026 · Public ·
-        <a href="https://mhayeri.github.io/hoopup/" target="_blank">Live site</a> ·
-        <a href="https://github.com/mhayeri/hoopup" target="_blank">Source</a>
-      </p>
-      <ul>
-        <li>Pickup-basketball app: find nearby courts on a live map, host a game, and RSVP.</li>
-        <li>Court data comes from OpenStreetMap through the Overpass API and is cached on the server.</li>
-        <li>A Postgres trigger enforces the 15-player cap and waitlist atomically, so games can't overbook.</li>
-        <li>Player profiles, friends, favorite courts, and a live "Hooping" status once a game starts.</li>
-        <li>Email/password, Google, and GitHub sign-in, with row-level security on all data.</li>
-      </ul>
-      <div>
-        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" alt="React" title="React" width="40" />
-        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" alt="TypeScript" title="TypeScript" width="40" />
-        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vitejs/vitejs-original.svg" alt="Vite" title="Vite" width="40" />
-        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg" alt="Tailwind CSS" title="Tailwind CSS" width="40" />
-        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/supabase/supabase-original.svg" alt="Supabase" title="Supabase" width="40" />
-        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg" alt="PostgreSQL" title="PostgreSQL" width="40" />
-      </div>
-    </article>
+    <div class="projects">
+      <article>
+        <h2>HoopUp</h2>
+        <p>
+          Started May 2026 · Last updated Jul 2026 · Public ·
+          <a href="https://mhayeri.github.io/hoopup/" target="_blank">Live site</a> ·
+          <a href="https://github.com/mhayeri/hoopup" target="_blank">Source</a>
+        </p>
+        <ul>
+          <li>Pickup-basketball app: find nearby courts on a live map, host a game, and RSVP.</li>
+          <li>Court data comes from OpenStreetMap through the Overpass API and is cached on the server.</li>
+          <li>A Postgres trigger enforces the 15-player cap and waitlist atomically, so games can't overbook.</li>
+          <li>Player profiles, friends, favorite courts, and a live "Hooping" status once a game starts.</li>
+          <li>Email/password, Google, and GitHub sign-in, with row-level security on all data.</li>
+        </ul>
+        <div>
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" alt="React" title="React" width="40" />
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" alt="TypeScript" title="TypeScript" width="40" />
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vitejs/vitejs-original.svg" alt="Vite" title="Vite" width="40" />
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg" alt="Tailwind CSS" title="Tailwind CSS" width="40" />
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/supabase/supabase-original.svg" alt="Supabase" title="Supabase" width="40" />
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg" alt="PostgreSQL" title="PostgreSQL" width="40" />
+        </div>
+      </article>
 
-    <article>
-      <h2>The Kitchen Club</h2>
-      <p>Started Jul 2026 · Last updated Sep 2026 · Private · In development</p>
-      <ul>
-        <li>New web product, currently in its foundation phase.</li>
-        <li>Turborepo monorepo with a Next.js app plus shared packages for the UI, domain model, API client, database, and auth.</li>
-        <li>Zod schemas act as the single validation layer and the source of the app's types.</li>
-        <li>Postgres on Neon with Drizzle ORM migrations; Better Auth keeps sessions in its own database.</li>
-        <li>CI runs formatting, linting, type checks, tests, and builds, and database migrations are gated.</li>
-      </ul>
-      <div>
-        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg" alt="Next.js" title="Next.js" width="40" />
-        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" alt="TypeScript" title="TypeScript" width="40" />
-        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg" alt="Tailwind CSS" title="Tailwind CSS" width="40" />
-        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg" alt="PostgreSQL" title="PostgreSQL" width="40" />
-        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bun/bun-original.svg" alt="Bun" title="Bun" width="40" />
-      </div>
-    </article>
+      <article>
+        <h2>The Kitchen Club</h2>
+        <p>Started Jul 2026 · Last updated Sep 2026 · Private · In development</p>
+        <ul>
+          <li>New web product, currently in its foundation phase.</li>
+          <li>Turborepo monorepo with a Next.js app plus shared packages for the UI, domain model, API client, database, and auth.</li>
+          <li>Zod schemas act as the single validation layer and the source of the app's types.</li>
+          <li>Postgres on Neon with Drizzle ORM migrations; Better Auth keeps sessions in its own database.</li>
+          <li>CI runs formatting, linting, type checks, tests, and builds, and database migrations are gated.</li>
+        </ul>
+        <div>
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg" alt="Next.js" title="Next.js" width="40" />
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" alt="TypeScript" title="TypeScript" width="40" />
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg" alt="Tailwind CSS" title="Tailwind CSS" width="40" />
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg" alt="PostgreSQL" title="PostgreSQL" width="40" />
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bun/bun-original.svg" alt="Bun" title="Bun" width="40" />
+        </div>
+      </article>
+
+      <article>
+        <h2>Esse ipsum accusantium laboriosam</h2>
+        <p>Consectetur nemo · Amet harum</p>
+        <p>Eveniet veniam minima nemo repellendus voluptatem dolor officiis tempore accusantium sapiente lorem amet elit laboriosam esse porro sit iure harum.</p>
+        <img src="https://vis-society.github.io/labs/2/images/empty.svg" alt="" />
+      </article>
+
+      <article>
+        <h2>Fugit esse dolor laboriosam</h2>
+        <p>Adipisicing quasi · Velit tempore</p>
+        <p>Corporis voluptatem atque lorem numquam natus sit quasi quidem eveniet placeat minima accusantium porro adipisicing esse iure laboriosam amet elit ipsum officiis fugit deserunt nemo consectetur dolorem explicabo aspernatur.</p>
+        <img src="https://vis-society.github.io/labs/2/images/empty.svg" alt="" />
+      </article>
+
+      <article>
+        <h2>Repellendus veniam velit amet</h2>
+        <p>Corporis dolor · Dolorem iure</p>
+        <p>Officiis dolor natus fugit accusantium explicabo voluptatem porro sapiente quasi eveniet ipsum harum laboriosam adipisicing esse amet sit deserunt quidem veniam placeat consectetur nemo elit tempore corporis numquam lorem iure.</p>
+        <img src="https://vis-society.github.io/labs/2/images/empty.svg" alt="" />
+      </article>
+
+      <article>
+        <h2>Tempore porro fugit minima</h2>
+        <p>Explicabo aspernatur · Atque consectetur</p>
+        <p>Minima officiis adipisicing laboriosam explicabo sapiente elit quasi eveniet veniam dolor ipsum velit lorem accusantium natus dolorem porro sit iure harum atque fugit nemo tempore placeat quidem numquam corporis.</p>
+        <img src="https://vis-society.github.io/labs/2/images/empty.svg" alt="" />
+      </article>
+
+      <article>
+        <h2>Tempore adipisicing ipsum placeat</h2>
+        <p>Quasi porro · Adipisicing elit</p>
+        <p>Voluptatem esse repellendus sit amet minima velit accusantium quasi laboriosam atque ipsum adipisicing natus sapiente aspernatur corporis iure harum officiis tempore numquam eveniet quidem dolorem.</p>
+        <img src="https://vis-society.github.io/labs/2/images/empty.svg" alt="" />
+      </article>
+
+      <article>
+        <h2>Veniam sit natus eveniet</h2>
+        <p>Esse eveniet · Tempore aspernatur</p>
+        <p>Nemo velit voluptatem harum natus sapiente aspernatur atque elit iure veniam adipisicing porro consectetur amet esse officiis ipsum quasi laboriosam quidem.</p>
+        <img src="https://vis-society.github.io/labs/2/images/empty.svg" alt="" />
+      </article>
+
+      <article>
+        <h2>Dolorem velit eveniet minima</h2>
+        <p>Voluptatem deserunt · Corporis amet</p>
+        <p>Deserunt elit quasi harum fugit lorem officiis adipisicing sapiente eveniet veniam dolor numquam sit minima placeat velit porro atque voluptatem ipsum explicabo quidem repellendus nemo amet consectetur esse.</p>
+        <img src="https://vis-society.github.io/labs/2/images/empty.svg" alt="" />
+      </article>
+
+      <article>
+        <h2>Amet dolor laboriosam nemo</h2>
+        <p>Ipsum porro · Repellendus natus</p>
+        <p>Quasi explicabo lorem deserunt adipisicing voluptatem amet esse accusantium nemo eveniet laboriosam corporis natus dolor velit officiis harum elit.</p>
+        <img src="https://vis-society.github.io/labs/2/images/empty.svg" alt="" />
+      </article>
+
+      <article>
+        <h2>Tempore esse nemo eveniet</h2>
+        <p>Accusantium repellendus · Esse deserunt</p>
+        <p>Velit lorem consectetur aspernatur repellendus iure minima amet elit placeat sapiente ipsum deserunt officiis sit corporis adipisicing voluptatem dolorem laboriosam natus.</p>
+        <img src="https://vis-society.github.io/labs/2/images/empty.svg" alt="" />
+      </article>
+
+      <article>
+        <h2>Harum officiis dolorem porro</h2>
+        <p>Sapiente numquam · Adipisicing elit</p>
+        <p>Eveniet laboriosam ipsum sit veniam elit repellendus numquam officiis atque lorem nemo minima tempore dolorem amet quidem accusantium corporis.</p>
+        <img src="https://vis-society.github.io/labs/2/images/empty.svg" alt="" />
+      </article>
+    </div>
   </body>
 </html>
