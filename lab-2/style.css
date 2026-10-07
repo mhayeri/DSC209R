@@ -45,6 +45,7 @@ form {
     display: grid;
     grid-template-columns: auto 1fr;
     gap: 1em;
+    max-width: 40em;
 
     label {
         display: grid;
@@ -52,8 +53,15 @@ form {
         grid-column: 1 / -1;
     }
 
+    textarea {
+        min-height: 10em;
+        resize: vertical;
+    }
+
     button {
-        grid-column: 1 / -1;
+        grid-column: 2;
+        justify-self: start;
+        padding: 0.4em 1.5em;
     }
 }
 
