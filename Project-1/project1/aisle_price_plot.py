@@ -85,11 +85,10 @@ def build_aisle_price_plot(thirds: pd.DataFrame, n_pricier_per_gram: int) -> alt
     title = alt.TitleParams(
         f"Less processed food costs more per calorie in {n_pricier_all} of {n_all} aisles",
         subtitle=[
-            "Each aisle's products are ranked by Food Processing Score (0 to 1, higher = more processed)",
-            "and split into thirds; each dot is the median price of the top or bottom third.",
-            f"Price is US cents per 100 kcal. Based on the {n_products:,} products with a price and calorie",
-            f"count in the {n_all} aisles with 60+ such products (coffee beans excluded). 12 aisles shown.",
-            f"Per 100 g instead of per calorie, the less processed third costs more in {n_pricier_per_gram} of {n_all}.",
+            "Products in each aisle are ranked by Food Processing Score (0 to 1, higher = more processed) and split into thirds.",
+            "Each dot is the median price of the top or bottom third, in US cents per 100 kcal.",
+            f"Based on {n_products:,} products with a price and calorie count in the {n_all} aisles with 60+ such products.",
+            f"Coffee beans excluded. 12 aisles shown. Per 100 g instead, the less processed third costs more in {n_pricier_per_gram} of {n_all}.",
             "Source: GroceryDB (Walmart, Target and Whole Foods products).",
         ],
         color=DARK,
