@@ -39,7 +39,7 @@ def build_aisle_price_plot(thirds: pd.DataFrame, n_pricier_per_gram: int) -> alt
             shown.assign(third=LEAST, cents=shown["cents_low"]),
         ]
     )
-    y = alt.Y("label:N", sort=order, title=None, axis=alt.Axis(ticks=False, domain=False, labelFontSize=13))
+    y = alt.Y("label:N", sort=order, title="Grocery aisle", axis=alt.Axis(ticks=False, domain=False, labelFontSize=13))
     x_scale = alt.Scale(domain=[0, 220])
     x_axis = alt.Axis(values=list(range(0, 221, 40)))
 
