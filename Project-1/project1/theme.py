@@ -4,7 +4,7 @@ from __future__ import annotations
 import altair as alt
 
 CONTEXT: str = "#4ea8de"   # background marks, a clear mid blue
-ACCENT: str = "#f26b21"    # the marks the reader should look at, a vivid orange
+ACCENT: str = "#c2410c"    # the marks the reader should look at, a burnt orange
 DARK: str = "#1b2a41"      # titles, reference lines, labels (deep navy)
 SUBTITLE: str = "#555555"
 

@@ -77,7 +77,7 @@ def build_aisle_price_plot(thirds: pd.DataFrame, n_pricier_per_gram: int) -> alt
     )
     top = shown[shown["category"] == CALLOUT_AISLE].iloc[0]
     callout = (
-        alt.Chart(pd.DataFrame({"x": [top["cents_low"]], "label": [top["label"]], "text": [f"{top['ratio']:.1f}× the price"]}))
+        alt.Chart(pd.DataFrame({"x": [top["cents_low"]], "label": [top["label"]], "text": [f"{top['ratio']:.1f}× the price of the most processed"]}))
         .mark_text(align="left", dx=12, fontSize=12, fontWeight="bold", color=ACCENT)
         .encode(x=alt.X("x:Q", scale=x_scale), y=y, text="text:N")
     )
