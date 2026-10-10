@@ -143,6 +143,38 @@ def aisle_price_thirds(
     return thirds.sort_values("ratio", ascending=False).reset_index(drop=True)
 
 
+def count_pricier_per_gram(
+    df: pd.DataFrame,
+    aisles: pd.Series,
+    min_items: int = MIN_AISLE_ITEMS,
+) -> int:
+    """Count aisles where the less processed third costs more per gram.
+
+    A robustness check on :func:`aisle_price_thirds`: price per calorie favors
+    calorie-dense food, so the same thirds are re-compared on price per 100 g.
+
+    Args:
+        df: Raw GroceryDB table.
+        aisles: Categories kept by :func:`aisle_price_thirds`, so both counts
+            are over the same set of aisles.
+        min_items: Minimum number of priced items an aisle needs.
+
+    Returns:
+        Number of aisles whose least processed third has the higher median
+        price per 100 g.
+    """
+    priced = df[(df["price percal"] > 0) & (df["package_weight"] > 0) & df["category"].isin(aisles)]
+    pricier = 0
+    for _, items in priced.groupby("category"):
+        if len(items) < min_items:
+            continue
+        low = items[items["FPro"] <= items["FPro"].quantile(1 / 3)]
+        high = items[items["FPro"] >= items["FPro"].quantile(2 / 3)]
+        per_100g = items["price"] / items["package_weight"] * 100
+        pricier += int(per_100g[low.index].median() > per_100g[high.index].median())
+    return pricier
+
+
 def is_organic(df: pd.DataFrame) -> pd.Series:
     """Flag products whose name says "organic" or "organics" (any case)."""
     return df["name"].str.contains(ORGANIC_PATTERN, case=False, regex=True)

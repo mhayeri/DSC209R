@@ -10,6 +10,7 @@ from project1.config import OUTPUT_DIR, PROJECT_ROOT, SCALE_FACTOR
 from project1.data import (
     aisle_price_thirds,
     aisle_ultra_share,
+    count_pricier_per_gram,
     load_grocerydb,
     organic_class_grid,
 )
@@ -28,7 +29,7 @@ def main() -> None:
     df = load_grocerydb()
     thirds = aisle_price_thirds(df)
     print(f"least processed third costs more in {(thirds['ratio'] > 1).sum()} of {len(thirds)} aisles")
-    save(build_aisle_price_plot(thirds), "plot1_aisle_price.png")
+    save(build_aisle_price_plot(thirds, count_pricier_per_gram(df, thirds["category"])), "plot1_aisle_price.png")
     save(build_organic_plot(organic_class_grid(df)), "plot2_organic_mix.png")
     shares = aisle_ultra_share(df)
     n_products = int(df["category"].value_counts().head(len(shares)).sum())

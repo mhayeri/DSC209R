@@ -13,12 +13,18 @@ MOST: str = "Most processed third"
 ROW_HEIGHT: int = 32
 PLOT_WIDTH: int = 560
 
+# Snack bars get the callout because the gap holds per calorie and per gram; the
+# longest bar (soup) flips per gram because soup is mostly water and few calories.
+CALLOUT_AISLE: str = "snacks-bars"
 
-def build_aisle_price_plot(thirds: pd.DataFrame) -> alt.TopLevelMixin:
+
+def build_aisle_price_plot(thirds: pd.DataFrame, n_pricier_per_gram: int) -> alt.TopLevelMixin:
     """Draw one row per everyday aisle with a dot for each third, joined by a line.
 
     Args:
         thirds: Output of :func:`project1.data.aisle_price_thirds`, sorted by ratio.
+        n_pricier_per_gram: Aisles where the less processed third also costs more
+            per gram, from :func:`project1.data.count_pricier_per_gram`.
 
     Returns:
         A themed Altair chart ready to be saved.
@@ -35,6 +41,7 @@ def build_aisle_price_plot(thirds: pd.DataFrame) -> alt.TopLevelMixin:
     )
     y = alt.Y("label:N", sort=order, title=None, axis=alt.Axis(ticks=False, domain=False, labelFontSize=13))
     x_scale = alt.Scale(domain=[0, 220])
+    x_axis = alt.Axis(values=list(range(0, 221, 40)))
 
     n_cheaper = int((shown["ratio"] <= 1).sum())
     shade = (
@@ -60,7 +67,7 @@ def build_aisle_price_plot(thirds: pd.DataFrame) -> alt.TopLevelMixin:
         .mark_circle(size=150, opacity=1)
         .encode(
             y=y,
-            x=alt.X("cents:Q", scale=x_scale, title="Median price per 100 calories (US cents)"),
+            x=alt.X("cents:Q", scale=x_scale, title="Median price per 100 calories (US cents)", axis=x_axis),
             color=alt.Color(
                 "third:N",
                 scale=alt.Scale(domain=[LEAST, MOST], range=[ACCENT, CONTEXT]),
@@ -68,19 +75,22 @@ def build_aisle_price_plot(thirds: pd.DataFrame) -> alt.TopLevelMixin:
             ),
         )
     )
-    top = shown.iloc[0]
+    top = shown[shown["category"] == CALLOUT_AISLE].iloc[0]
     callout = (
         alt.Chart(pd.DataFrame({"x": [top["cents_low"]], "label": [top["label"]], "text": [f"{top['ratio']:.1f}× the price"]}))
         .mark_text(align="left", dx=12, fontSize=12, fontWeight="bold", color=ACCENT)
         .encode(x=alt.X("x:Q", scale=x_scale), y=y, text="text:N")
     )
+    n_products = int(thirds["n"].sum())
     title = alt.TitleParams(
-        "Less processed food usually costs more per calorie",
+        f"Less processed food costs more per calorie in {n_pricier_all} of {n_all} aisles",
         subtitle=[
-            "Items in each aisle are split into thirds by Food Processing Score; each dot is the median "
-            "price of one third.",
-            f"12 familiar aisles shown. Across all {n_all} aisles with 60+ priced items, the less "
-            f"processed third costs more in {n_pricier_all}.",
+            "Each aisle's products are ranked by Food Processing Score (0 to 1, higher = more processed)",
+            "and split into thirds; each dot is the median price of the top or bottom third.",
+            f"Price is US cents per 100 kcal. Based on the {n_products:,} products with a price and calorie",
+            f"count in the {n_all} aisles with 60+ such products (coffee beans excluded). 12 aisles shown.",
+            f"Per 100 g instead of per calorie, the less processed third costs more in {n_pricier_per_gram} of {n_all}.",
+            "Source: GroceryDB (Walmart, Target and Whole Foods products).",
         ],
         color=DARK,
     )

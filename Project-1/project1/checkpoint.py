@@ -62,7 +62,9 @@ def _text_page(heading: str, body: str) -> plt.Figure:
     return fig
 
 
-def _wrap_to_width(fig: plt.Figure, body: str, width_in: float) -> str:
+def _wrap_to_width(
+    fig: plt.Figure, body: str, width_in: float, fontsize: int = BODY_FONTSIZE
+) -> str:
     """Greedily wrap ``body`` by rendered width rather than character count.
 
     Character-count wrapping gives ragged lines with a proportional font, so
@@ -70,7 +72,7 @@ def _wrap_to_width(fig: plt.Figure, body: str, width_in: float) -> str:
     """
     renderer = fig.canvas.get_renderer()
     max_px = width_in * fig.dpi
-    probe = fig.text(0, 0, "", fontsize=BODY_FONTSIZE)
+    probe = fig.text(0, 0, "", fontsize=fontsize)
     lines: list[str] = []
     current = ""
     for word in body.split():
