@@ -81,6 +81,13 @@ select {
     }
 }
 
+/* On narrower screens the switcher would cover the nav, so make room */
+@media (max-width: 70rem) {
+    body {
+        padding-top: 3.5rem;
+    }
+}
+
 form {
     display: grid;
     grid-template-columns: auto 1fr;
