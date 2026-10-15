@@ -39,8 +39,17 @@ nav {
 
 input,
 textarea,
-button {
+button,
+select {
     font: inherit;
+}
+
+.color-scheme {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 80%;
+    font-family: inherit;
 }
 
 form {
