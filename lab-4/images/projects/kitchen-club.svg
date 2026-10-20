@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800">
+  <rect width="1200" height="800" fill="#1f2a24"/>
+  <circle cx="600" cy="330" r="120" fill="none" stroke="#e8b04b" stroke-width="18"/>
+  <path d="M560 270v120M600 270v120M640 270v120" stroke="#e8b04b" stroke-width="18" stroke-linecap="round"/>
+  <text x="600" y="560" fill="#f4efe6" font-family="Georgia, serif" font-size="84" text-anchor="middle">The Kitchen Club</text>
+  <text x="600" y="640" fill="#a9b8ae" font-family="system-ui, sans-serif" font-size="36" text-anchor="middle" letter-spacing="6">IN DEVELOPMENT</text>
+</svg>
