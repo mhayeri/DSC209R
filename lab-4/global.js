@@ -84,3 +84,65 @@ form?.addEventListener('submit', function (event) {
   let url = form.action + '?' + params.join('&');
   location.href = url;
 });
+
+export async function fetchJSON(url) {
+  try {
+    // Fetch the JSON file from the given URL
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch projects: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error fetching or parsing JSON data:', error);
+  }
+}
+
+const HEADING_LEVELS = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'];
+
+export function renderProjects(projects, containerElement, headingLevel = 'h2') {
+  if (!(containerElement instanceof Element)) {
+    console.error('renderProjects: containerElement is not a DOM element');
+    return;
+  }
+  if (!HEADING_LEVELS.includes(headingLevel)) {
+    headingLevel = 'h2';
+  }
+
+  containerElement.innerHTML = '';
+
+  if (!projects?.length) {
+    containerElement.innerHTML = '<p>No projects to show yet.</p>';
+    return;
+  }
+
+  for (let project of projects) {
+    const article = document.createElement('article');
+
+    // Image paths in the JSON are relative to the site root (where this file lives)
+    const image = new URL(project.image, import.meta.url).href;
+
+    const details = project.bullets
+      ? `<ul>${project.bullets.map((b) => `<li>${b}</li>`).join('')}</ul>`
+      : `<p>${project.description}</p>`;
+
+    const tech = (project.tech ?? [])
+      .map((t) => `<img src="${t.icon}" alt="${t.name}" title="${t.name}" width="40" />`)
+      .join('');
+
+    article.innerHTML = `
+      <${headingLevel}>${project.title}</${headingLevel}>
+      <p>${project.year}${project.meta ? ' · ' + project.meta : ''}</p>
+      ${details}
+      <div>
+        <img src="${image}" alt="${project.title}" />
+        ${tech ? `<div class="tech">${tech}</div>` : ''}
+      </div>
+    `;
+
+    containerElement.appendChild(article);
+  }
+}
