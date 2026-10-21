@@ -2,7 +2,7 @@
   {
     "title": "Lab 4: JavaScript II",
     "year": "2026",
-    "image": "https://vis-society.github.io/labs/2/images/empty.svg",
+    "image": "images/projects/lab-4.png",
     "meta": "DSC 209R · Oct 2026 · <a href=\"https://mhayeri.github.io/DSC209R/lab-4/\">Live site</a> · <a href=\"https://github.com/mhayeri/DSC209R/tree/main/lab-4\">Source</a>",
     "description": "Projects now load from a JSON file and render through one reusable function, the home page shows the latest three, and live GitHub profile stats come from the GitHub API."
   },
