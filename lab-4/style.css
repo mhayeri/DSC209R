@@ -124,9 +124,45 @@ form {
     }
 
     h2,
+    h3,
     p,
     ul {
         margin: 0;
+    }
+
+    img {
+        width: 100%;
+        aspect-ratio: 3 / 2;
+        object-fit: cover;
+        object-position: top;
+        border: 1px solid oklch(50% 10% 200 / 40%);
+        border-radius: 0.25em;
+    }
+
+    .tech img {
+        width: 40px;
+        aspect-ratio: auto;
+        border: none;
+        margin: 0.5em 0.25em 0 0;
+    }
+}
+
+#profile-stats dl {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    text-align: center;
+
+    dt {
+        grid-row: 1;
+        color: oklch(50% 3% 200);
+        font-size: 90%;
+    }
+
+    dd {
+        grid-row: 2;
+        margin: 0;
+        font-size: 200%;
+        font-weight: bold;
     }
 }
 
