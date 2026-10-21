@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Project 2 Report</title>
+    <style>
+      :root {
+        --color-neutral-95: hsl(220 10% 95%);
+        --color-neutral-90: hsl(220 10% 90%);
+        --color-neutral-80: hsl(220 10% 80%);
+        --color-neutral-70: hsl(220 10% 70%);
+        --color-neutral-60: hsl(220 10% 60%);
+        --color-neutral-50: hsl(220 10% 50%);
+        --color-neutral-40: hsl(220 10% 40%);
+        --color-neutral-30: hsl(220 10% 30%);
+        --color-neutral-20: hsl(220 10% 20%);
+        --color-neutral-10: hsl(220 10% 10%);
+      }
+
+      html {
+        font: 100%/1.5 system-ui;
+        counter-reset: figure;
+        background: var(--color-neutral-95);
+        max-width: min(75vw, 80em);
+        margin: 0 auto;
+      }
+
+      /* Headings */
+
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        line-height: 1.1;
+        font-weight: 600;
+        text-wrap: balance;
+      }
+
+      h1,
+      h2 {
+        border-bottom: 1px solid var(--color-neutral-80);
+        padding-bottom: 0.2em;
+      }
+
+      h1 {
+        margin-block: 1em 0.5rem;
+        font-size: clamp(2.5em, 150% + 2vh + 2vw, 10vmin);
+        font-weight: 800;
+
+        small {
+          display: block;
+          width: fit-content;
+          padding: 0.2em 0.5em;
+          margin-inline: auto;
+          color: white;
+          background: var(--color-neutral-40);
+          font-size: 40%;
+          text-transform: uppercase;
+          white-space: nowrap;
+        }
+      }
+
+      h2 {
+        font-size: 180%;
+        color: var(--color-neutral-30);
+      }
+
+      h3 {
+        font-size: 130%;
+      }
+
+      /* Lists */
+
+      ul,
+      ol {
+        padding-inline-start: 2em;
+      }
+
+      li {
+        &::marker {
+          color: var(--color-neutral-40);
+        }
+
+        + li {
+          margin-top: 0.2em;
+        }
+      }
+
+      /* Sectioning elements */
+
+      header {
+        padding-block: 1em;
+        text-align: center;
+      }
+
+      main {
+        background: white;
+        color: var(--color-neutral-20);
+        border-radius: 1rem;
+        padding: 0.1rem 2rem;
+      }
+
+      /* Figures */
+
+      figure {
+        margin: 1em 0;
+        padding: 0.5rem;
+        margin-inline: -0.5em;
+        border: 1px solid var(--color-neutral-80);
+        box-shadow: 0 0.1em 0.2em var(--color-neutral-95);
+        text-align: center;
+        background: white;
+
+        > figcaption {
+          font: 500 75% var(--font-sans);
+          background: var(--color-neutral-95);
+          padding: 0.5rem;
+          margin: -0.5rem;
+          margin-top: 0.5rem;
+          counter-increment: figure;
+          text-align: left;
+
+          &::before {
+            content: 'Figure ' counter(figure) ': ';
+            font-weight: bold;
+            color: var(--color-neutral-40);
+          }
+
+          a:not(:hover, :focus, :active) {
+            color: inherit;
+            text-decoration: underline;
+            text-decoration-color: color-mix(
+              in lab,
+              currentColor,
+              transparent 70%
+            );
+          }
+        }
+      }
+
+      /* Additions to the course template */
+
+      img {
+        max-width: 100%;
+        height: auto;
+      }
+
+      .decisions li + li {
+        margin-top: 0.8em;
+      }
+
+      .score {
+        font-variant-numeric: tabular-nums;
+        color: var(--color-neutral-40);
+        white-space: nowrap;
+      }
+
+      @media (max-width: 40em) {
+        html {
+          max-width: none;
+          margin-inline: 0.75em;
+        }
+
+        main {
+          padding-inline: 1rem;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <header>
+      <h1>
+        <small>Project 2</small>
+        Persuasive or Deceptive Visualization?
+      </h1>
+
+      <p><strong>Mustafa Hayeri</strong> — <em>muhayeri@ucsd.edu</em></p>
+    </header>
+
+    <main>
+      <h2>Proposition: Poorer countries are catching up with richer ones.</h2>
+
+      <p>
+        Both charts use the same 162 countries: every country with World Bank GDP per capita
+        (constant 2010 US$) in both 1990 and 2019. Countries are split into four quarters of
+        about 40 each by their 1990 income. Each chart ends with the same small inset, the
+        income of the lower three quarters as a share of the richest quarter. The only
+        difference between the two insets is whether China and India are counted.
+      </p>
+      <p>
+        Each design decision below has a score from -2 (fully deceptive) to +2 (fully earnest).
+      </p>
+
+      <section>
+        <h3>FOR the Proposition</h3>
+
+        <figure>
+          <a href="for.png" title="Open the full-size chart">
+            <img
+              src="for.png"
+              width="1800"
+              height="1280"
+              alt="Bubble chart of 162 countries. The x-axis is GDP per capita in 1990 on a log scale, the y-axis is average annual growth from 1990 to 2019. Bubbles are sized by population and colored by income quarter. A dashed trend line slopes down from about 2.6% growth for the poorest countries to about 0.9% for the richest. China, at 8.7% a year, is the largest bubble. An inset shows the population-weighted income of the lower three quarters rising from 6.4% of the richest quarter's in 1990 to 10.8% in 2019."
+            />
+          </a>
+          <figcaption>
+            Countries that were poorer in 1990 grew faster on average through 2019, and the
+            population-weighted income of the lower three quarters rose from 6.4% to 10.8% of the
+            richest quarter's.
+          </figcaption>
+        </figure>
+
+        <p>Design Decisions and Rationale:</p>
+
+        <ul class="decisions">
+          <li>
+            <strong>Growth rate instead of dollars added</strong> <span class="score">(score -1.5)</span>.
+            The y-axis is each country's compound annual growth rate. A percentage rewards a low
+            starting point: the poorest quarter's median went from $563 to $1,117 and nearly
+            doubled, while the richest quarter's median added far more dollars and still grew
+            more slowly (a median of 2.3% a year against 1.4%). The whole chart rests on this
+            choice, and it works because growth rates are the standard way economists talk about
+            convergence, so few readers question it. The alternative was dollars added, which is
+            what the AGAINST chart uses.
+          </li>
+          <li>
+            <strong>Log scale for 1990 income</strong> <span class="score">(score +1)</span>.
+            Starting incomes run from about $200 to about $125,000, so a linear axis would pack
+            most countries against the left edge. A log scale is the honest default for income
+            and I would use it whichever side I was arguing. It also gives the poorest countries
+            most of the width, which is where the fastest growers sit, so the eye lands on China
+            and Vietnam first. I considered ranking countries instead of plotting income, but
+            ranks hide how far apart the quarters really are.
+          </li>
+          <li>
+            <strong>Population as bubble size and in the inset</strong> <span class="score">(score -0.5)</span>.
+            Sizing bubbles by population makes China (8.7% a year) and India (4.6%) the two
+            biggest marks on the page, and both sit in the fast-growing corner. The inset weights
+            by population too, which is how the lower three quarters rise from 6.4% to 10.8% of
+            the richest quarter's income. Counting people instead of countries is defensible,
+            since it is usually what "the world got richer" means. What the chart does not say is
+            that China carries most of that rise: leave China out and about three-quarters of the
+            increase disappears. Equal-size dots were the alternative; they made the poor-country
+            cloud look much less impressive.
+          </li>
+          <li>
+            <strong>Starting in 1990, with data in both years</strong> <span class="score">(score -1)</span>.
+            I fixed the window at 1990-2019. Starting in 1970 shrinks the panel to 109 countries
+            and the correlation between starting income and growth to -0.07, which is close to
+            nothing, and within 1990-2000 alone the richer countries actually grew faster. I also
+            tried starting in 2000, where the correlation is stronger (-0.39), but a 19-year window
+            looked like it had been picked for the answer. 1990 reads as a round, neutral date,
+            which is exactly why it works. Requiring data in both years also drops 55 of 217
+            countries, among them Afghanistan, Somalia, South Sudan, Syria and Yemen, so the
+            poorest quarter is missing several countries hit by war, which are the ones most
+            likely to have stalled. Both charts share this panel, but it helps this side more.
+          </li>
+          <li>
+            <strong>Title and trend line</strong> <span class="score">(score -1.5)</span>.
+            The title states the pattern as a plain fact, and the dashed trend line gives the eye
+            a slope to follow. The correlation behind that line is only -0.25, and 6 of the 41
+            countries in the poorest quarter are poorer now than in 1990. A careful reader can see
+            that scatter, but the title tells them what to look for first. An earlier draft also
+            had a bold note inside the plot repeating the title; it read as advocacy, so I cut it.
+            I kept Congo, Dem. Rep. labeled at the bottom of the chart, because hiding every
+            counterexample would make the slant easier to spot, not harder.
+          </li>
+        </ul>
+      </section>
+
+      <section>
+        <h3>AGAINST the Proposition</h3>
+
+        <figure>
+          <a href="against.png" title="Open the full-size chart">
+            <img
+              src="against.png"
+              width="1800"
+              height="1280"
+              alt="Dumbbell chart with one row per income quarter. Each row runs from the quarter's median GDP per capita in 1990 to its median in 2019, on a linear dollar axis from $0 to $50,000. The richest quarter moves from about $29,700 to $43,600, labeled plus $13,906. The poorest quarter's two dots nearly overlap, labeled plus $554. The subtitle gives the gap between the richest and poorest medians as $29,100 in 1990 and $42,500 in 2019. A key above the chart marks open dots as 1990 and filled dots as 2019. An inset shows the population-weighted income of the lower three quarters, without China and India, moving from 10.3% of the richest quarter's to 10.7%."
+            />
+          </a>
+          <figcaption>
+            In dollars, the richest quarter's median income per person rose by $13,906 and the
+            poorest quarter's by $554. The gap between them widened, and without China and India the
+            lower three quarters barely gained on the richest.
+          </figcaption>
+        </figure>
+
+        <p>Design Decisions and Rationale:</p>
+
+        <ul class="decisions">
+          <li>
+            <strong>Dollars added instead of growth rates</strong> <span class="score">(score -0.5)</span>.
+            Each row shows a quarter's median income in 1990 and 2019 in constant dollars, so the
+            richest quarter's +$13,906 sits next to the poorest quarter's +$554, about 25 times as
+            much. The title only describes what is plotted and lets those two labels make the
+            argument. Earlier titles said "25 times as much" and then listed the two dollar
+            figures, but both read as slanted at first glance. Dollars are what people actually spend, so this is a fair way to
+            ask whether the gap is closing. It is also the measure that automatically favors
+            whoever starts richest, and the chart never mentions that the poorest median nearly
+            doubled while the richest grew by about half. Percent growth was the alternative, and
+            it is what the FOR chart uses.
+          </li>
+          <li>
+            <strong>Median country in each quarter</strong> <span class="score">(score +0.5)</span>.
+            Each quarter is summarized by its median country, so a country of a million people
+            counts the same as China. That keeps one giant from deciding the result, which I think
+            is a reasonable choice for a chart about countries. The cost is that China and India,
+            home to about 2.8 billion people in 2019, barely move the poorest row. A
+            population-weighted mean was the alternative; it would have helped the other side.
+          </li>
+          <li>
+            <strong>Linear axis starting at $0</strong> <span class="score">(score +1)</span>.
+            The dollar axis is linear and starts at zero, which is the textbook honest choice for
+            amounts of money. Here it also does persuasive work: the poorest quarter's two dots
+            almost touch, so its progress looks like nothing, while the richest quarter's bar
+            spans more than a quarter of the chart. A log axis would have shown the poorer rows
+            moving, so I rejected it for this side.
+          </li>
+          <li>
+            <strong>The gap figure in the subtitle</strong> <span class="score">(score -0.5)</span>.
+            The subtitle gives the gap between the richest and poorest medians: $29,100 in 1990 and
+            $42,500 in 2019. Both numbers are correct, and an absolute gap is a common way to report
+            inequality. But an absolute gap can keep growing even while poorer countries close in
+            proportionally, which is what the FOR chart shows. An earlier draft extrapolated the
+            dollar gains to say the poorest quarter would need over two thousand years to catch
+            up. The arithmetic was right, but it read as a loaded claim, so I replaced it with the
+            plainer gap figure.
+          </li>
+          <li>
+            <strong>The inset without China and India</strong> <span class="score">(score -1.5)</span>.
+            The inset copies the FOR chart's inset, same scale and same colors, with one change:
+            China and India are left out. The share then moves only from 10.3% to 10.7%, so the
+            narrowing in the other chart starts to look like a two-country story. The inset title
+            says what was removed, which is the earnest part. The deceptive part is that I picked
+            those two countries because removing them flattens the bars. China does almost all of
+            the work: on its own it accounts for about three-quarters of the change, and India on
+            its own accounts for none of it.
+          </li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Final Reflection</h2>
+
+        <p>
+          Finding two opposing stories was the easy part. Within an hour of exploring the data I
+          had both, and every number on both charts is correct. The hard part was keeping the
+          slant out of sight. My first draft of the AGAINST chart said the poorest countries would
+          need over two thousand years to catch up at their current pace. It was true arithmetic,
+          but it sounded like an argument, so I swapped it for a plain gap figure. Labels were
+          harder than encodings in general: once the measure is chosen, the title only has to
+          describe the chart accurately for the reader to follow it wherever it leads.
+        </p>
+        <p>
+          Two things surprised me. The first was how much of the hopeful story depends on one
+          country. With everyone counted, the lower three quarters went from 6.4% to 10.8% of the
+          richest quarter's income, and China alone accounts for about three-quarters of that.
+          The second was how fragile the "poorer countries grow faster" pattern is. It holds from
+          1990 and more strongly from 2000, nearly vanishes from 1970, and reverses within the
+          1990s. I expected a widely cited finding to be sturdier than that. Using the same
+          inset on both charts was my way of showing this: one exclusion choice turns a doubling
+          into almost nothing.
+        </p>
+        <p>
+          Before this project I would have said ethical visualization means the numbers are right.
+          I no longer think that is enough, because both of my charts pass that test and still
+          point in opposite directions. My working definition now is that the reader could
+          rebuild the main result, and its strongest counterpoint, from what is on the page, and
+          that the analyst's choices would survive being made before seeing the answer. That gives
+          me a rough bound. A persuasive choice is acceptable if it is disclosed and I would make
+          it no matter which side it helped, like the log axis or a zero-based dollar axis. It
+          becomes misleading when it was picked because it flips the result and the reader has no
+          way to know, like my start year or which countries to drop. Both charts cross that line
+          somewhere, and my scores say where. The line sits in the choices and what gets
+          disclosed, not in any particular chart technique, and I suspect that is why
+          persuasion and deception are so hard to tell apart.
+        </p>
+      </section>
+    </main>
+  </body>
+</html>
