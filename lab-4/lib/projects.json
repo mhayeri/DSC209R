@@ -10,8 +10,8 @@
     "title": "Project 2: Deceptive Visualization",
     "year": "2026",
     "image": "images/projects/project-2.png",
-    "meta": "DSC 209R · Oct 2026",
-    "description": "Two opposing sets of charts on whether poorer countries are catching up with richer ones, built from the same World Bank GDP data, showing how what you measure, group, or leave out can flip the story."
+    "meta": "DSC 209R · Oct 2026 · <a href=\"https://mhayeri.github.io/DSC209R/Project-2/\">Report</a> · <a href=\"https://github.com/mhayeri/DSC209R/tree/main/Project-2\">Source</a>",
+    "description": "Two charts built from the same World Bank GDP data, one arguing for and one against the claim that poorer countries are catching up with richer ones, with a report on the design choices behind each side."
   },
   {
     "title": "Lab 3: JavaScript I",
