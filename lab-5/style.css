@@ -207,3 +207,9 @@ section {
         color: oklch(50% 3% 200);
     }
 }
+
+#projects-pie-plot {
+    max-width: 20em;
+    margin-block: 2em;
+    overflow: visible;
+}
