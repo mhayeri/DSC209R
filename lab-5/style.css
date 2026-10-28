@@ -213,3 +213,41 @@ section {
     margin-block: 2em;
     overflow: visible;
 }
+
+.container {
+    display: flex;
+    align-items: center;
+    gap: 2em;
+}
+
+#projects-pie-plot {
+    margin-block: 1em;
+    flex: 0 0 auto;
+    width: min(20em, 40%);
+}
+
+.legend {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(9em, 1fr));
+    gap: 1em;
+    margin: 0;
+    padding: 1em;
+    list-style: none;
+    border: 1px solid oklch(50% 10% 200 / 40%);
+    border-radius: 0.4em;
+
+    .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5em;
+    }
+
+    .swatch {
+        display: inline-block;
+        width: 1em;
+        aspect-ratio: 1 / 1;
+        background-color: var(--color);
+        border-radius: 50%;
+    }
+}
