@@ -251,3 +251,12 @@ section {
         border-radius: 50%;
     }
 }
+
+.searchBar {
+    width: 100%;
+    box-sizing: border-box;
+    margin-block: 1em;
+    padding: 0.5em 0.75em;
+    border: 1px solid oklch(50% 10% 200 / 40%);
+    border-radius: 0.4em;
+}

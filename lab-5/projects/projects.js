@@ -45,4 +45,20 @@ function render(projectsGiven) {
   }
 }
 
+let query = '';
+
+function searchProjects(list) {
+  return list.filter((project) => {
+    let values = Object.values(project).join('
+').toLowerCase();
+    return values.includes(query.toLowerCase());
+  });
+}
+
 render(projects);
+
+let searchInput = document.querySelector('.searchBar');
+searchInput.addEventListener('input', (event) => {
+  query = event.target.value;
+  render(searchProjects(projects));
+});
