@@ -9,7 +9,31 @@ let colors = d3.scaleOrdinal(d3.schemeTableau10);
 let arcGenerator = d3.arc().innerRadius(0).outerRadius(50);
 let sliceGenerator = d3.pie().value((d) => d.value);
 
+let selectedIndex = -1;
+
+function selectWedge(idx, data) {
+  selectedIndex = selectedIndex === idx ? -1 : idx;
+
+  d3.select('svg')
+    .selectAll('path')
+    .attr('class', (_, i) => (i === selectedIndex ? 'selected' : ''));
+  d3.select('.legend')
+    .selectAll('li')
+    .attr('class', (_, i) =>
+      i === selectedIndex ? 'legend-item selected' : 'legend-item',
+    );
+
+  if (selectedIndex === -1) {
+    renderProjects(projects, projectsContainer, 'h2');
+  } else {
+    let year = data[selectedIndex].label;
+    let yearProjects = projects.filter((project) => project.year === year);
+    renderProjects(yearProjects, projectsContainer, 'h2');
+  }
+}
+
 function renderPieChart(projectsGiven) {
+  selectedIndex = -1;
   let rolledData = d3.rollups(
     projectsGiven,
     (v) => v.length,
@@ -25,7 +49,11 @@ function renderPieChart(projectsGiven) {
   legend.selectAll('li').remove();
 
   arcs.forEach((arc, idx) => {
-    svg.append('path').attr('d', arc).attr('fill', colors(idx));
+    svg
+      .append('path')
+      .attr('d', arc)
+      .attr('fill', colors(idx))
+      .on('click', () => selectWedge(idx, data));
   });
 
   data.forEach((d, idx) => {
@@ -33,7 +61,8 @@ function renderPieChart(projectsGiven) {
       .append('li')
       .attr('style', `--color:${colors(idx)}`)
       .attr('class', 'legend-item')
-      .html(`<span class="swatch"></span> ${d.label} <em>(${d.value})</em>`);
+      .html(`<span class="swatch"></span> ${d.label} <em>(${d.value})</em>`)
+      .on('click', () => selectWedge(idx, data));
   });
 }
 
