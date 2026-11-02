@@ -1,0 +1,148 @@
+[
+  {
+    "title": "Lab 4: JavaScript II",
+    "year": "2026",
+    "image": "images/projects/lab-4.png",
+    "meta": "DSC 209R · Oct 2026 · <a href=\"https://mhayeri.github.io/DSC209R/lab-4/\">Live site</a> · <a href=\"https://github.com/mhayeri/DSC209R/tree/main/lab-4\">Source</a>",
+    "description": "Projects now load from a JSON file and render through one reusable function, the home page shows the latest three, and live GitHub profile stats come from the GitHub API."
+  },
+  {
+    "title": "Project 2: Deceptive Visualization",
+    "year": "2026",
+    "image": "images/projects/project-2.png",
+    "meta": "DSC 209R · Oct 2026 · <a href=\"https://mhayeri.github.io/DSC209R/Project-2/\">Report</a> · <a href=\"https://github.com/mhayeri/DSC209R/tree/main/Project-2\">Source</a>",
+    "description": "Two charts built from the same World Bank GDP data, one arguing for and one against the claim that poorer countries are catching up with richer ones, with a report on the design choices behind each side."
+  },
+  {
+    "title": "Lab 3: JavaScript I",
+    "year": "2026",
+    "image": "images/projects/lab-3.png",
+    "meta": "DSC 209R · Oct 2026 · <a href=\"https://mhayeri.github.io/DSC209R/lab-3/\">Live site</a> · <a href=\"https://github.com/mhayeri/DSC209R/tree/main/lab-3\">Source</a>",
+    "description": "A navigation bar generated with JavaScript that highlights the current page, a light/dark theme switcher that remembers the choice, and a contact form that opens the mail client."
+  },
+  {
+    "title": "Lab 2: Styling with CSS",
+    "year": "2026",
+    "image": "images/projects/lab-2.png",
+    "meta": "DSC 209R · Oct 2026 · <a href=\"https://mhayeri.github.io/DSC209R/lab-2/\">Live site</a> · <a href=\"https://github.com/mhayeri/DSC209R/tree/main/lab-2\">Source</a>",
+    "description": "Styled the site with modern CSS: a flexbox navigation bar, a responsive project grid built on subgrid, a grid-based contact form, and a cleaner CV layout."
+  },
+  {
+    "title": "Project 1: Grocery Prices",
+    "year": "2026",
+    "image": "images/projects/project-1.png",
+    "meta": "DSC 209R · Oct 2026 · <a href=\"https://github.com/mhayeri/DSC209R/tree/main/Project-1\">Source</a>",
+    "description": "Expository charts built from GroceryDB (Walmart, Target and Whole Foods products) comparing price by aisle, the organic mix, and the share of ultra-processed food."
+  },
+  {
+    "title": "Lab 1: Portfolio Website",
+    "year": "2026",
+    "image": "images/projects/lab-1.png",
+    "meta": "DSC 209R · Sep 2026 · <a href=\"https://mhayeri.github.io/DSC209R/lab-1/\">Live site</a> · <a href=\"https://github.com/mhayeri/DSC209R/tree/main/lab-1\">Source</a>",
+    "description": "Built a multi-page personal site in plain HTML with a home page, a projects page, a contact form, and a CV, all hosted on GitHub Pages."
+  },
+  {
+    "title": "Lab 0: Getting Started",
+    "year": "2026",
+    "image": "images/projects/lab-0.png",
+    "meta": "DSC 209R · Sep 2026 · <a href=\"https://mhayeri.github.io/DSC209R/lab-0/\">Live site</a> · <a href=\"https://github.com/mhayeri/DSC209R/tree/main/lab-0\">Source</a>",
+    "description": "Set up the development tools and the course repository, and published a first Hello World page to GitHub Pages."
+  },
+  {
+    "title": "The Kitchen Club",
+    "year": "2026",
+    "image": "images/projects/kitchen-club.svg",
+    "meta": "Started Jul 2026 · Last updated Sep 2026 · Private · In development",
+    "description": "New web product, currently in its foundation phase.",
+    "bullets": [
+      "New web product, currently in its foundation phase.",
+      "Turborepo monorepo with a Next.js app plus shared packages for the UI, domain model, API client, database, and auth.",
+      "Zod schemas act as the single validation layer and the source of the app's types.",
+      "Postgres on Neon with Drizzle ORM migrations; Better Auth keeps sessions in its own database.",
+      "CI runs formatting, linting, type checks, tests, and builds, and database migrations are gated."
+    ],
+    "tech": [
+      {
+        "name": "Next.js",
+        "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg"
+      },
+      {
+        "name": "TypeScript",
+        "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg"
+      },
+      {
+        "name": "Tailwind CSS",
+        "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg"
+      },
+      {
+        "name": "PostgreSQL",
+        "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg"
+      },
+      {
+        "name": "Bun",
+        "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bun/bun-original.svg"
+      }
+    ]
+  },
+  {
+    "title": "HoopUp",
+    "year": "2026",
+    "image": "images/projects/hoopup.png",
+    "meta": "Started May 2026 · Last updated Jul 2026 · Public · <a href=\"https://mhayeri.github.io/hoopup/\">Live site</a> · <a href=\"https://github.com/mhayeri/hoopup\">Source</a>",
+    "description": "Pickup-basketball app: find nearby courts on a live map, host a game, and RSVP.",
+    "bullets": [
+      "Pickup-basketball app: find nearby courts on a live map, host a game, and RSVP.",
+      "Court data comes from OpenStreetMap through the Overpass API and is cached on the server.",
+      "A Postgres trigger enforces the 15-player cap and waitlist atomically, so games can't overbook.",
+      "Player profiles, friends, favorite courts, and a live \"Hooping\" status once a game starts.",
+      "Email/password, Google, and GitHub sign-in, with row-level security on all data."
+    ],
+    "tech": [
+      {
+        "name": "React",
+        "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg"
+      },
+      {
+        "name": "TypeScript",
+        "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg"
+      },
+      {
+        "name": "Vite",
+        "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vitejs/vitejs-original.svg"
+      },
+      {
+        "name": "Tailwind CSS",
+        "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg"
+      },
+      {
+        "name": "Supabase",
+        "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/supabase/supabase-original.svg"
+      },
+      {
+        "name": "PostgreSQL",
+        "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg"
+      }
+    ]
+  },
+  {
+    "title": "Esse ipsum accusantium laboriosam",
+    "year": "2025",
+    "image": "https://vis-society.github.io/labs/2/images/empty.svg",
+    "meta": "Consectetur nemo · Amet harum",
+    "description": "Eveniet veniam minima nemo repellendus voluptatem dolor officiis tempore accusantium sapiente lorem amet elit laboriosam esse porro sit iure harum."
+  },
+  {
+    "title": "Fugit esse dolor laboriosam",
+    "year": "2024",
+    "image": "https://vis-society.github.io/labs/2/images/empty.svg",
+    "meta": "Adipisicing quasi · Velit tempore",
+    "description": "Corporis voluptatem atque lorem numquam natus sit quasi quidem eveniet placeat minima accusantium porro adipisicing esse iure laboriosam amet elit ipsum officiis fugit deserunt nemo."
+  },
+  {
+    "title": "Tempore porro fugit minima",
+    "year": "2023",
+    "image": "https://vis-society.github.io/labs/2/images/empty.svg",
+    "meta": "Explicabo aspernatur · Atque consectetur",
+    "description": "Minima officiis adipisicing laboriosam explicabo sapiente elit quasi eveniet veniam dolor ipsum velit lorem accusantium natus dolorem porro sit iure harum atque fugit nemo."
+  }
+]
