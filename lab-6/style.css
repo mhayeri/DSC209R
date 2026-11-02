@@ -316,3 +316,49 @@ dl.stats {
         stroke: oklch(50% 10% 200 / 20%);
     }
 }
+
+dl.info {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.25em 1em;
+    margin: 0;
+    transition-duration: 500ms;
+    transition-property: opacity, visibility;
+
+    dt {
+        color: oklch(50% 3% 200);
+        font-size: 85%;
+    }
+
+    dd {
+        margin: 0;
+        font-weight: 500;
+    }
+}
+
+dl.info[hidden]:not(:hover, :focus-within) {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.tooltip {
+    position: fixed;
+    top: 1em;
+    left: 1em;
+    padding: 0.75em 1em;
+    background-color: color-mix(in oklch, canvas 85%, transparent);
+    backdrop-filter: blur(4px);
+    border: 1px solid oklch(50% 10% 200 / 25%);
+    border-radius: 0.5em;
+    box-shadow: 0 0.25em 0.75em oklch(0% 0% 0 / 15%);
+}
+
+circle {
+    transition: 200ms;
+    transform-origin: center;
+    transform-box: fill-box;
+}
+
+circle:hover {
+    transform: scale(1.5);
+}
