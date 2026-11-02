@@ -285,3 +285,24 @@ section {
         fill: var(--color);
     }
 }
+
+dl.stats {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+    gap: 0 1em;
+
+    dt {
+        grid-row: 1;
+        color: oklch(50% 3% 200);
+        font-size: 80%;
+        text-transform: uppercase;
+    }
+
+    dd {
+        grid-row: 2;
+        margin: 0;
+        font-size: 150%;
+        font-weight: bold;
+    }
+}
