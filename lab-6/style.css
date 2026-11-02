@@ -306,3 +306,13 @@ dl.stats {
         font-weight: bold;
     }
 }
+
+.gridlines {
+    .domain {
+        display: none;
+    }
+
+    .tick line {
+        stroke: oklch(50% 10% 200 / 20%);
+    }
+}
